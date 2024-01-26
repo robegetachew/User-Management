@@ -1,0 +1,31 @@
+.ad-user-activity-container {
+    margin-left: 200px;
+   
+    }
+  
+  .ad-activity-table {
+    margin-top: -140px;
+    width: 1000px;
+    padding-top: 40px;
+  background-color: white;
+  border-radius: 18px;
+  background: #FFFFFF;
+  box-shadow: 0px 4px 30px 0px #00000040;
+  margin-left: 0px;
+  padding-left: 100px;
+  
+  }
+  
+  .ad-activity-table th,
+  .ad-activity-table td {
+    border: 1px solid #fff;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .ad-activity-table th {
+    color: black;
+    height: 10px;
+    background-color: #EAEAEA;
+  }
+  

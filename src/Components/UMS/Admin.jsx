@@ -1,57 +1,32 @@
-
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Admin.jsx                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: Robe Getachew <Robegetachew12@gmail.com>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-                                                                          
+import React, { useState, useEffect } from 'react';
+import { Form, Dropdown, Button , Modal} from 'react-bootstrap';
 import CubeIcon from '../Assets/cube.png';
 import UserProfileIcon from '../Assets/userprofile.png';
 import ActivityIcon from '../Assets/activity.png';
 import PasswordIcon from '../Assets/pwd.png';
-import passwordIcon from '../Assets/password.png';
-import SearchIcon from '../Assets/search.png'; 
-import UploadPicture from '../Assets/upload.png'; 
+import GenderIcon from '../Assets/genderr.png';
+import PhoneNumberIcon from '../Assets/phonee.png';
+import EmailIcon from '../Assets/emaill.png'
+import UploadPicture from '../Assets/upload.png';
 import './Admin.css';
-import React, { useState, useEffect } from 'react';
-import person_ic from '../Assets/person.png';
-import cal_ic from '../Assets/cal.png';
-import select_cal_icon from '../Assets/date.png';
-import location_icon from '../Assets/location.png';
-import arrow_down_icon from '../Assets/arrow-down.png';
-import arrow_up_icon from '../Assets/arrow-up.png';
-import PhoneInput from 'react-phone-number-input';
+import Adduser from './Adduser';
+import Footer from './Footer';
 import 'react-phone-number-input/style.css';
-import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import gender from '../Assets/gender.png';
-
-import { useNavigate } from 'react-router-dom';
-
-
-
 import axios from 'axios';
+import Edit from '../Assets/edit.png';
+import Delete from '../Assets/delete.png';
 
-
-
-
-// Sample data for users
 const initialUsers = [
   { id: 1, name: 'Unknown', email: 'unknown@example.com', status: 'Active', role: 'Admin', activity: 'High' },
   { id: 2, name: 'uk1', email: 'uk1@example.com', status: 'Inactive', role: 'User', activity: 'Medium' },
-  // Add more user data as needed
 ];
 
-// Sample data for user activity
 const initialActivityData = [
   { id: 1, username: 'Unknown', date: '2024-01-19', activity: 'Logged in' },
   { id: 2, username: 'uk1', date: '2024-01-18', activity: 'Changed picture' },
-  // Add more activity data as needed
 ];
 
-// ActivityTable component for displaying recent user activity
 const ActivityTable = ({ activityData }) => (
   <table className="ad-activity-table">
     <thead>
@@ -75,48 +50,62 @@ const ActivityTable = ({ activityData }) => (
 
 const UserTable = ({ users, handleEdit, handleDelete, handleAddUser }) => (
   <div>
-    <button className="add-user-button" onClick={handleAddUser}>
-      +Add User 
-    </button>
+    <Button className="add-user-button" onClick={handleAddUser}>
+      +Add User
+    </Button>
     <table className="ad-user-table">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Username</th>
-        <th>Email</th>
-        <th>Status</th>
-        <th>Role</th>
-        <th>Activity</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      {users.map((user) => (
-        <tr key={user.id}>
-          <td>{user.id}</td>
-          <td>{user.name}</td>
-          <td>{user.email}</td>
-          <td>{user.status || 'Active'}</td>
-          <td>{user.role || 'User'}</td>
-          <td>{user.activity || 'N/A'}</td>
-          <td>
-            <button onClick={() => handleEdit(user)}>Edit</button>
-            <button onClick={() => handleDelete(user.id)}>Delete</button>
-          </td>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Username</th>
+          <th>Email</th>
+          <th>Status</th>
+          <th>Role</th>
+          <th>Activity</th>
+          <th>Actions</th>
         </tr>
-      ))}
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        {users.map((user) => (
+          <tr key={user.id}>
+            <td>{user.id}</td>
+            <td>{user.name}</td>
+            <td>{user.email}</td>
+            <td>{user.status || 'Active'}</td>
+            <td>{user.role || 'User'}</td>
+            <td>{user.activity || 'N/A'}</td>
+            <td>
+              {/* Edit icon */}
+              <img
+                src={Edit}
+                alt="Edit Icon"
+                onClick={() => handleEdit(user)}
+                style={{ cursor: 'pointer' }}
+              />
+              {/* Delete icon */}
+              <img
+                src={Delete}
+                alt="Delete Icon"
+                onClick={() => handleDelete(user.id)}
+                style={{ cursor: 'pointer', marginLeft: '10px' }}
+              />
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   </div>
 );
+
 const AddUserForm = ({ handleCancel, handleSave }) => (
-  <div className="add-user-form">
-    <p>Hello</p>
-    {/* You can add form fields and logic for adding a new user here */}
-    <button onClick={handleCancel}>Cancel</button>
-    <button onClick={handleSave}>Save</button>
+  <div className='box'>
+    <div className="title">Add new user</div>
+    <div className="add-user-form">
+      <Adduser onCancel={handleCancel} onSave={handleSave} />
+    </div>
   </div>
 );
+
 const Admin = () => {
   const [searchInput, setSearchInput] = useState('');
   const [roleFilter, setRoleFilter] = useState('All');
@@ -127,121 +116,35 @@ const Admin = () => {
   const [activityData, setActivityData] = useState(initialActivityData);
   const [selectedUser, setSelectedUser] = useState(null);
   const [profilePicture, setProfilePicture] = useState(null);
-  const navigate= useNavigate();
-
-  const [fullName, setFullName] = useState('');
-  const [selectedGender, setSelectedGender] = useState('');
-  const [isGenderDropdownOpen, setIsGenderDropdownOpen] = useState(false);
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [birthdate, setBirthdate] = useState(null);
-  const [countries, setCountries] = useState([]);
-  const [selectedLocation, setSelectedLocation] = useState(null);
-  const [isLocationDropdownOpen, setIsLocationDropdownOpen] = useState(false);
-  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
-  const [selectedPicture, setSelectedPicture] = useState(null);
-  const [zIndexGender, setZIndexGender] = useState(1);
-  const [zIndexLocation, setZIndexLocation] = useState(1);
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [passwordsMatch, setPasswordsMatch] = useState(true);
-  const [username, setUsername] = useState('');
-
 
   useEffect(() => {
-    const fetchCountries = async () => {
-      try {
-        const response = await axios.get('https://restcountries.com/v3.1/all');
-        const countryOptions = response.data.map(country => ({
-          value: country.cca2,
-          label: country.name.common,
-        }));
-        setCountries(countryOptions);
-      } catch (error) {
-        console.error('Error fetching countries:', error);
-      }
-    };
-
-    fetchCountries();
+    
   }, []);
-
-  const handleGenderButtonClick = () => {
-    setIsGenderDropdownOpen(!isGenderDropdownOpen);
-    setZIndexGender(isGenderDropdownOpen ? 1 : 2);
-  };
-
-  const handleGenderSelect = (gender) => {
-    setSelectedGender(gender);
-    setIsGenderDropdownOpen(false);
-    setZIndexGender(1);
-  };
-
-  const handleDatePickerClick = () => {
-    setIsLocationDropdownOpen(false);
-    setIsGenderDropdownOpen(false);
-    setIsDatePickerOpen(true);
-  };
-
-  const handleLocationButtonClick = () => {
-    setIsLocationDropdownOpen(!isLocationDropdownOpen);
-    setZIndexLocation(isLocationDropdownOpen ? 1 : 2);
-  };
-
-  const handleLocationSelect = (location) => {
-    setSelectedLocation(location);
-    setIsLocationDropdownOpen(false);
-    setZIndexLocation(1);
-  };
-
-  const handlePictureChange = (event) => {
-    const file = event.target.files[0];
-    setSelectedPicture(file);
-  };
-  const handleUsernameChange = (event) => {
-    setUsername(event.target.value);
-  };
-
-  const handleFullNameChange = (event) => {
-    setFullName(event.target.value);
-  };
-  const [passwordStrength, setPasswordStrength] = useState('');
-
-  const handlePasswordChange = (event) => {
-    const newPassword = event.target.value;
-    setPassword(newPassword);
-    const strength = calculatePasswordStrength(newPassword);
-    setPasswordStrength(strength);
-  };
-  const calculatePasswordStrength = (password) => {
-   
-    if (password.length < 6) {
-      return 'Weak';
-    } else if (password.length < 10) {
-      return 'Moderate';
-    } else {
-      return 'Strong';
-    }
-  };
-  const handleConfirmPassword = () => {
-    setPasswordsMatch(password === confirmPassword);
-  };
-
-  const handleClear = () => {
-    setFullName('');
-    setSelectedGender('');
-    setPhoneNumber('');
-    setBirthdate(null);
-    setSelectedLocation(null);
-    setSelectedPicture(null);
-    setPassword('');
-    setConfirmPassword('');
-    setUsername('');
-  };
 
   const handleSaveChanges = async () => {
     // Handle saving changes to the backend (not implemented in this example)
     // Replace 'YOUR_BACKEND_API_URL' with your actual backend API URL
     console.log('Save Changes clicked. Data not sent to backend.');
   };
+  const [showEditModal, setShowEditModal] = useState(false);
+
+  const handleEdit = (user) => {
+    setSelectedUser(user);
+    setShowEditModal(true);
+  };
+
+  const handleEditCancel = () => {
+    setShowEditModal(false);
+  };
+
+  const handleEditSave = () => {
+    // Implement logic to save the edited user (not implemented in this example)
+    // For example, you can send a request to your backend
+    console.log("Save edited user logic goes here.");
+    // After saving, you can close the modal
+    setShowEditModal(false);
+  };
+
   const handleAddUser = () => {
     // Set the state to show the user addition form
     setShowAddUserForm(true);
@@ -271,13 +174,12 @@ const Admin = () => {
       reader.readAsDataURL(selectedFile);
     }
   };
+
   const handleSectionChange = (section) => setActiveSection(section);
+  const handleDelete = (userId) =>
+    setUsers(users.filter((user) => user.id !== userId));
 
-  const handleEdit = (user) => setSelectedUser(user);
-
-  const handleDelete = (userId) => setUsers(users.filter((user) => user.id !== userId));
- 
- const handleSearch = () => {
+  const handleSearch = () => {
     const filteredUsers = initialUsers.filter(
       (user) =>
         user.name.toLowerCase().includes(searchInput.toLowerCase()) ||
@@ -298,54 +200,106 @@ const Admin = () => {
   const renderActiveSection = () => {
     switch (activeSection) {
       case 'Users':
-        return ( 
+        return (
           <div className='ad-user-activity-container'>
-            <div className="ad-search-and-filter">
-              <div className='ad-search'>
-              <img src={SearchIcon} alt="searchicon" className="ad-search-icon" />
-              <input
-               type="text"
-               placeholder="Search by name or email"
-               value={searchInput}
-               onChange={(e) => setSearchInput(e.target.value)}
-             />
-                <button onClick={handleSearch}>Search</button></div>
-              <div className='ad-role-status-filter'>
-                <select
-                  value={roleFilter}
-                  onChange={(e) => setRoleFilter(e.target.value)}
-                >
-                  <option value="All">All Roles</option>
-                  <option value="Admin">Admin</option>
-                  <option value="User">User</option>
-                </select>
-                <select
-                  value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                >
-                  <option value="All">All Status</option>
-                  <option value="Active">Active</option>
-                  <option value="Inactive">Inactive</option>
-                </select>
-                <button onClick={handleFilter}>Filter</button>
+            {showAddUserForm ? (
+              <AddUserForm
+                handleCancel={handleCancelAddUser}
+                handleSave={handleSaveAddUser}
+              />
+            ) :  showEditModal ? (
+              <div>
+                <div className="box1">
+                  {/* Profile Picture */}
+                  <img
+                    src={selectedUser ? selectedUser.profilePicture || "../Assets/person.png" : "../Assets/person.png"}
+                    alt=""
+                    className="user-profile-picture"
+                  />
+
+                  {/* User Information */}
+                  <div className="user-info">
+                    <div className='info-row'>
+                    <p>{selectedUser ? selectedUser.name : 'Unknown'}</p></div>
+                    {/* Gender */}
+                    <div className="info-row">
+                      <img src={GenderIcon} alt="Gender Icon" />
+                      <p>{selectedUser ? selectedUser.gender : 'N/A'}</p>
+                    </div>
+                 {/* Location */}
+                  <div className="info-row">
+                <p>{selectedUser ? selectedUser.location : 'N/A'}</p>
               </div>
-            </div>
-            <div className="usertable">
-              {/* Conditionally render UserTable or AddUserForm based on showAddUserForm state */}
-              {showAddUserForm ? (
-                <AddUserForm
-                  handleCancel={handleCancelAddUser}
-                  handleSave={handleSaveAddUser}
-                />
-              ) : (
-                <UserTable
-                  users={users}
-                  handleEdit={handleEdit}
-                  handleDelete={handleDelete}
-                  handleAddUser={handleAddUser}
-                />
-              )}
-            </div>
+                    {/* Activity Status */}
+                    <div className="info-row">
+                      <img src={ActivityIcon} alt="Activity Status Icon" />
+                      <p>{selectedUser ? selectedUser.activityStatus : 'N/A'}</p>
+                    </div>
+
+                    {/* Phone Number */}
+                    <div className="info-row">
+                      <img src={PhoneNumberIcon} alt="Phone Number Icon" />
+                      <p>{selectedUser ? selectedUser.phoneNumber : 'N/A'}</p>
+                    </div>
+
+                    {/* Email */}
+                    <div className="info-row">
+                      <img src={EmailIcon} alt="Email Icon" />
+                      <p>{selectedUser ? selectedUser.email : 'N/A'}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="box2">Box 2 Content</div>
+                <div className="box3">Box 3 Content</div>
+              </div>
+            ) : (
+              <div>
+                <div className="ad-search-and-filter">
+                  <div className='ad-search'>
+                    <Form.Control
+                      type="text"
+                      placeholder="Search User"
+                      value={searchInput}
+                      onChange={(e) => setSearchInput(e.target.value)}
+                    />
+                    <Button variant="primary" onClick={handleSearch}>
+                      Search
+                    </Button>
+                  </div>
+                  <div className='ad-role-status-filter'>
+                    <Form.Control
+                      as="select"
+                      value={roleFilter}
+                      onChange={(e) => setRoleFilter(e.target.value)}
+                    >
+                      <option value="All">Roles</option>
+                      <option value="Admin">Admin</option>
+                      <option value="User">User</option>
+                    </Form.Control>
+                    <Form.Control
+                      as="select"
+                      value={statusFilter}
+                      onChange={(e) => setStatusFilter(e.target.value)}
+                    >
+                      <option value="All">Status</option>
+                      <option value="Active">Active</option>
+                      <option value="Inactive">Inactive</option>
+                    </Form.Control>
+                    <Button variant="primary" onClick={handleFilter}>
+                      Filter
+                    </Button>
+                  </div>
+                </div>
+                <div className="usertable">
+                  <UserTable
+                    users={users}
+                    handleEdit={handleEdit}
+                    handleDelete={handleDelete}
+                    handleAddUser={handleAddUser}
+                  />
+                </div>
+              </div>
+            )}
           </div>
         );
       case 'UserActivity':
@@ -354,162 +308,43 @@ const Admin = () => {
             <ActivityTable activityData={activityData} />
           </div>
         );
-        case 'Profile':
+      case 'Profile':
         return (
           <div className='ad-user-activity-container'>
             <div className="ad-profile-section">
-            <div className="ad-profile-box">
-  {/* Content for the first box */}
-  <label htmlFor="profile-picture" className="ad-profile-picture">
-    <input
-      type="file"
-      id="profile-picture"
-      accept="image/*"
-      onChange={handleAddPicture}
-      style={{ display: 'none' }}
-    />
-    
-    <img src={profilePicture || "../Assets/person.png"} alt="Profile Picture" />
-  </label>
+              <div className="ad-profile-box">
+                {/* Content for the first box */}
+                <label htmlFor="profile-picture" className="ad-profile-picture">
+                  <input
+                    type="file"
+                    id="profile-picture"
+                    accept="image/*"
+                    onChange={handleAddPicture}
+                    style={{ display: 'none' }}
+                  />
+                  <img src={profilePicture || "../Assets/person.png"} alt="Profile Picture" />
+                </label>
 
-  {/* Upload picture icon */}
-  <div className="upload-icon-container">
-    <label htmlFor="profile-picture" className="upload-icon-label">
-      <img src={UploadPicture} alt="Upload Icon" className="upload-icon" />
-    </label>
-  </div>
-</div>
+                {/* Upload picture icon */}
+                <div className="upload-icon-container">
+                  <label htmlFor="profile-picture" className="upload-icon-label">
+                    <img src={UploadPicture} alt="Upload Icon" className="upload-icon" />
+                  </label>
+                </div>
+              </div>
 
               <div className="ad-update-profile-box">
-                {/* Content for the second box */}
-                <div className='adm-container'>
-      <div className="adm-header">
-        <div className="adm-text">Update Profile</div>
-      </div>
-      <div className="adm-inputs">
-        <div className="adm-txts">
-          Full Name
-        </div>
-        <div className="adm-input">
-          <img src={person_ic} alt="" />
-          <input type="text" value={fullName} onChange={handleFullNameChange} />
-        </div>
-        <div className="adm-txts">
-          Gender
-        </div>
-        <div className={`input adm-gender-input ${isGenderDropdownOpen ? 'open' : ''}`} style={{ zIndex: zIndexGender }}>
-          <img src={gender} alt="" />
-          <div className="adm-gender-button" onClick={handleGenderButtonClick}>
-            <img
-              className="adm-arrow-icon"
-              src={isGenderDropdownOpen ? arrow_up_icon : arrow_down_icon}
-              alt="Arrow"
-            />
-          </div>
-          {selectedGender && (
-            <div className="adm-selected-gender">{selectedGender}</div>
-          )}
-          {isGenderDropdownOpen && (
-            <div className="adm-gender-dropdown">
-              <div onClick={() => handleGenderSelect('Female')}>Female</div>
-              <div onClick={() => handleGenderSelect('Male')}>Male</div>
-            </div>
-          )}
-        </div>
-        <div className="adm-txts">
-          Phone Number
-        </div>
-        <div className="adm-input">
-          <div className='adm-c-code'>
-            <PhoneInput
-              placeholder="Enter phone number"
-              value={phoneNumber}
-              onChange={setPhoneNumber}
-              defaultCountry="ET"
-              countryOptions={[
-                { value: 'ET', label: '+251' },
-              ]}
-            />
-          </div>
-        </div>
-        <div className="adm-txts">
-          Date of birth </div>
-        <div className="adm-input">
-          <img src={cal_ic} alt="Calendar" className="ad-cal-icon" />
-          <DatePicker
-            selected={birthdate}
-            onChange={(date) => setBirthdate(date)}
-            dateFormat="dd/MM/yyyy"
-            placeholderText="Select birth date"
-            open={isDatePickerOpen}
-            onClickOutside={() => setIsDatePickerOpen(false)}
-          />
-          <div className='adm-select-date' onClick={handleDatePickerClick}>
-            <img src={select_cal_icon} alt="Calendar" className="adm-select-icon" />
-          </div>
-        </div>
-        <div className="adm-txts">
-          Location
-        </div>
-        <div className={`adm-input adm-gender-input ${isLocationDropdownOpen ? 'open' : ''}`} style={{ zIndex: zIndexLocation }}>
-  <img src={location_icon} alt="Location" className="adm-location-icon" />
-  <div className="adm-gender-button" onClick={handleLocationButtonClick}>
-    <img
-      className="adm-arrow-iconn"
-      src={isLocationDropdownOpen ? arrow_up_icon : arrow_down_icon}
-      alt="Arrow"
-    />
-  </div>
-  {selectedLocation && (
-    <div className="adm-selected-gender">{selectedLocation.label}</div>
-  )}
-  {isLocationDropdownOpen && (
-    <div className="adm-gender-dropdown" style={{ maxHeight: '150px', overflowY: 'auto' }}>
-      {/* Set the max height and enable scrolling */}
-      {countries.map(country => (
-        <div key={country.value} onClick={() => handleLocationSelect(country)}>
-          {country.label}
-        </div>
-      ))}
-    </div>
-  )}
-</div>
-      </div>
-      <div className='adm-side2'>
-      <div className="adm-txts">
-          Change password
-        </div>
-        <div className="adm-input">
-          <img src={passwordIcon} alt="" />
-          <input
-            type="password"
-            value={password}
-            onChange={handlePasswordChange}
-          />
-        </div>
-        <div className="adm-txts">
-          Confirm password
-        </div>
-        <div className="adm-input">
-        <img src={passwordIcon} alt="" />
-          <input 
-          type="password"
-          value={password} 
-          onChange={handleConfirmPassword}/>
-        </div>
-        <div className="adm-txts">
-          Change username
-        </div>
-        <div className="adm-input">
-          <img src={person_ic} alt="" />
-          <input type="text" value={username} onChange={handleUsernameChange} />
-        </div>
-        </div>
-      <div className="adm-submit-container">
-        <div className="adm-submit" onClick={handleClear}>Clear</div>
-        <div className="adm-submitt" onClick={()=>navigate("/admin")}>Save</div>
-      </div>
-    </div>
+                <div className='update-title'>
+                  Update profile
+                </div>
+                <div className='aduser'>
+                  <Adduser
+                    className="additional-class-for-all-instances"
+                    style="style2"  // or "style2" for different instances
+                    onCancel={handleCancelAddUser}
+                    onSave={handleSaveAddUser}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -519,60 +354,58 @@ const Admin = () => {
     }
   };
 
-
   return (
-      <div className="ad-admin-container">
-        <header className="ad-header">
-          <h1>
-            <span role="img" aria-label="cube icon" className="ad-icon">
-              <img src={CubeIcon} alt="Cube Icon" />
-            </span>
-            
-            UMS
-          </h1>
-        </header>
-        <div className='ad-container'>
-          <nav>
-            <ul>
-              <li
-                className={`ad-li-container ${
-                  activeSection === 'Users' ? 'ad-active' : ''
-                }`}
-                onClick={() => handleSectionChange('Users')}
-              >
-                <img src={UserProfileIcon} alt="User Icon" />
-                <div className='ad-txt'>
-                  Users
-                </div>
-              </li>
-              <li
-                className={`ad-li-container ${
-                  activeSection === 'UserActivity' ? 'ad-active' : ''
-                }`}
-                onClick={() => handleSectionChange('UserActivity')}
-              >
-                <img src={ActivityIcon} alt="Activity Icon" />
-                <div className='ad-txt'>
-                  User Activity
-                </div>
-              </li>
-              <li
-                className={`ad-li-container ${
-                  activeSection === 'Profile' ? 'ad-active' : ''
-                }`}
-                onClick={() => handleSectionChange('Profile')}
-              >
-                <img src={PasswordIcon} alt="Password Icon" />
-                <div className='ad-txt'>
-                  My Profile
-                </div>
-              </li>
-            </ul>
-          </nav>
-          {renderActiveSection()}
+    <div className="ad-admin-container">
+      <header className="ad-header">       
+        <h1>
+          <span role="img" aria-label="cube icon" className="ad-icon">
+            <img src={CubeIcon} alt="Cube Icon" />
+          </span>
+          UMS
+        </h1>
+      </header>
+      <div className='ad-container'>
+        <nav>
+          <ul>
+            <li
+              className={`ad-li-container ${
+                activeSection === 'Users' ? 'ad-active' : ''
+              }`}
+              onClick={() => handleSectionChange('Users')}
+            >
+              <img src={UserProfileIcon} alt="User Icon" />
+              <div className='ad-txt'>
+                Users
+              </div>
+            </li>
+            <li
+              className={`ad-li-container ${
+                activeSection === 'UserActivity' ? 'ad-active' : ''
+              }`}
+              onClick={() => handleSectionChange('UserActivity')}
+            >
+              <img src={ActivityIcon} alt="Activity Icon" />
+              <div className='ad-txt'>
+                User Activity
+              </div>
+            </li>
+            <li
+              className={`ad-li-container ${
+                activeSection === 'Profile' ? 'ad-active' : ''
+              }`}
+              onClick={() => handleSectionChange('Profile')}
+            >
+              <img src={PasswordIcon} alt="Password Icon" />
+              <div className='ad-txt'>
+                My Profile
+              </div>
+            </li>
+          </ul>
+        </nav>
+        {renderActiveSection()}
       </div>
-      </div>
+      <Footer />
+    </div>
   );
 };
-
 export default Admin;

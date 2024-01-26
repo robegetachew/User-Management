@@ -6,10 +6,10 @@ import Resetpassword from './Components/UMS/Resetpassword';
 import Usersetupprofile from './Components/UMS/Usersetupprofile';
 import Admin from './Components/UMS/Admin';
 import Wrongpassword from './Components/UMS/Wrongpassword';
-import AddUserModal from './Components/UMS/AddUserModal';
+import Adduser from './Components/UMS/Adduser';
 
-
-
+import Userdata from './Components/UMS/Userdata';
+import User from './Components/UMS/User';
 
 // import Wrongpassword from './Components/UMS/Wrongpassword';
 import { Route, Routes } from "react-router-dom";
@@ -28,7 +28,9 @@ function App() {
       <Route path="/resetpassword" element={<Resetpassword/>}></Route>
       <Route path="/admin" element={<Admin/>}></Route>
       <Route path="/wrongpassword" element={<Wrongpassword/>}></Route>
-      <Route path="/addusermodal" element={<AddUserModal/>}></Route>
+      <Route path="/adduser" element={<Adduser/>}></Route>
+      <Route path="/userdata" element={<Userdata />}>  </Route>
+      <Route path="/user" element={<User />}>  </Route>
 
     </Routes>
   );

@@ -98,10 +98,35 @@ const Usersetupprofile = () => {
   };
 
   const handleSaveChanges = async () => {
-    // Handle saving changes to the backend (not implemented in this example)
-    // Replace 'YOUR_BACKEND_API_URL' with your actual backend API URL
-    console.log('Save Changes clicked. Data not sent to backend.');
+    try {
+      const apiUrl = 'http://your-laravel-app/api/user-setup-profile';
+      const formData = new FormData();
+  
+      // Append form data fields
+      formData.append('fullName', fullName);
+      formData.append('gender', selectedGender);
+      formData.append('phoneNumber', phoneNumber);
+      formData.append('birthdate', birthdate);
+      formData.append('location', selectedLocation ? selectedLocation.label : '');
+      formData.append('picture', selectedPicture);
+  
+      // Make the HTTP request
+      const response = await axios.post(apiUrl, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${localStorage.getItem('yourAuthToken')}`,
+        },
+      });
+  
+      console.log('Profile setup successful:', response.data);
+      // Handle success, e.g., show a success message, navigate to another page, etc.
+    } catch (error) {
+      // Handle errors
+      console.error('Error setting up profile:', error);
+      // Display an error message to the user
+    }
   };
+
 
   return (
     <div className='container'>
@@ -222,7 +247,7 @@ const Usersetupprofile = () => {
       </div>
       <div className="submit-container">
         <div className="submit" onClick={handleClear}>Clear</div>
-        <div className="submitt" onClick={()=>navigate("/admin")}>Save</div>
+        <div className="submitt" onClick={handleSaveChanges}>Save</div>
       </div>
     </div>
   );

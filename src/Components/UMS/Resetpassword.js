@@ -6,20 +6,6 @@ import { useNavigate } from 'react-router-dom';
 const ResetPassword = ({ onBackToLogin }) => {
   const navigate= useNavigate();
 
-  // const [isWrongPassword, setIsWrongPassword] = useState(false);
-
-  // const handleResetPassword = () => {
-//buhala to be added logic to check if the new password is valid
-  //   const isNewPasswordInvalid = true; 
-
-  //   if (isNewPasswordInvalid) {
-  //     setIsWrongPassword(true);
-  //     // display an error message
-  //   } else {
-  //     //let's assume it navigate back to the login page
-  //     onBackToLogin();
-  //   }
-  //  };
 
   return (
     <div className='signin-container'>

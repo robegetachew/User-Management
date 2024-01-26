@@ -1,23 +1,54 @@
 import React, { useState } from 'react';
 import './Signin.css';
 import emailIcon from '../Assets/email.png';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const Forgetpassword = ({ onBackToLogin, onVerifySuccess }) => {
-  const navigate= useNavigate();
+const Forgetpassword = () => {
+  const navigate = useNavigate();
   const [isVerification, setIsVerification] = useState(false);
   const [verificationCode, setVerificationCode] = useState('');
+  const [email, setEmail] = useState('');
 
-  const handleContinue = () => {
-    // logic to send the verification code to the email
-    // assume the code is sent successfully
-    setIsVerification(true);
+  const handleContinue = async () => {
+    try {
+      // Replace with your Laravel API endpoint for sending verification code
+      const apiUrl = 'http://192.168.0.191:8000/forget-password';
+
+      const response = await axios.post(apiUrl, { email });
+
+      // Assume Laravel returns a success message
+      if (response.data.success) {
+        setIsVerification(true);
+      } else {
+        // Handle error, show a message or log it
+        console.error('Failed to send verification code.');
+      }
+    } catch (error) {
+      // Handle network errors or other issues
+      console.error('Error during verification code request:', error);
+    }
   };
 
- 
+  const handleVerify = async () => {
+    try {
+      // Replace with your Laravel API endpoint for verifying the code
+      const apiUrl = 'http://192.168.0.191:8000/api/verify';
 
-  const handleBack = () => {
-    setIsVerification(false);
+      const response = await axios.post(apiUrl, { email, verificationCode });
+
+      // Assume Laravel returns a success message
+      if (response.data.success) {
+        // Redirect to the reset password page on successful verification
+        navigate('/resetpassword');
+      } else {
+        // Handle error, show a message or log it
+        console.error('Verification code is invalid.');
+      }
+    } catch (error) {
+      // Handle network errors or other issues
+      console.error('Error during verification:', error);
+    }
   };
 
   return (
@@ -34,15 +65,10 @@ const Forgetpassword = ({ onBackToLogin, onVerifySuccess }) => {
             <div className="signin-txts">Email</div>
             <div className="signin-input">
               <img src={emailIcon} alt="" />
-              <input type="email" />
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
             </div>
             <div className="forget-submit" onClick={handleContinue}>
               Continue
-            </div>
-          </div>
-          <div className="back-to-login" onClick={onBackToLogin}>
-            <div className="signin-new-user">
-              <span onClick={()=>navigate("/Signin")}>Back to Login</span>
             </div>
           </div>
         </div>
@@ -63,14 +89,9 @@ const Forgetpassword = ({ onBackToLogin, onVerifySuccess }) => {
                 style={{ marginLeft: '10px' }}
               />
             </div>
-            <div className="forget-submit" onClick={()=>navigate("/resetpassword")}>
+            <div className="forget-submit" onClick={handleVerify}>
               Verify
             </div>
-          </div>
-          { /* Do not render Resetpassword component here */ }
-          
-            <div className="signin-new-user">
-              <span onClick={()=>navigate("/Signin")} >Back to Login</span>
           </div>
         </div>
       )}

@@ -1,5 +1,4 @@
 
-
 .reg-container {
   width: 550px;
   height: 600px; 
@@ -111,4 +110,9 @@ line-height: 29.05px;
 span {
   color: #007DFA;
   cursor: pointer;
+}
+.error-message {
+  color: red;
+  margin-top: 5px;
+  font-size: 14px;
 }

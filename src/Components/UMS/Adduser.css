@@ -1,0 +1,236 @@
+body {
+    width: 100%;
+    background: #E0EFFE;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .add-input {
+    display: flex;
+    width: 270px;
+    height: 30px;
+    border: 3px solid #6894D7;
+    border-radius: 10px;
+    margin-left: 20px;
+    position: relative;
+  }
+  
+  .add-txts {
+    margin-left: 45px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 19px;
+    letter-spacing: 0em;
+    text-align: left;
+    margin-bottom: 1px;
+  }
+  
+  .add-text {
+    font-weight: 600;
+    line-height: 29.05px;
+    font-size: 24px;
+    margin-bottom: 15px;
+    margin-left: 40px;
+    color: #0E2040;
+    padding-top: 4px;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  .add-inputs {
+    display: flex;
+    flex-direction: column;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  .add-input {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    margin-left: 40px;
+  }
+  
+  .add-input img {
+    margin: 0px 10px;
+    width: 20px;
+  }
+  
+  .add-input input {
+    outline: none;
+    border: none;
+    width: 200px;
+    height: 20px;
+    border: none;
+  }
+  
+  .add-input:last-child {
+    margin-bottom: 0;
+  }
+  
+  .add-gender-input {
+    position: relative;
+    width: 270px;
+    height: 30px;
+    margin-left: 40px;
+    margin-bottom: 20px;
+  }
+  
+  .add-gender-button {
+    padding-left: 180px;
+    padding-top: 3px;
+    position: relative;
+  }
+  
+  .add-gender-dropdown {
+    position: absolute;
+    width: 255px;
+    background-color: #ffffff;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+    margin-top: 93px;
+    margin-left: 5px;
+    border-radius: 8px;
+    overflow: hidden;
+    z-index: 1;
+  }
+.add-location-dropdown{
+  position: absolute;
+  width: 255px;
+  background-color: #ffffff;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  font-size: 14px;
+  margin-top: 110px;
+  margin-left: 5px;
+  padding-left: 10px;
+  border-radius: 8px;
+  overflow: hidden;
+  z-index: 1;
+
+}
+.add-location-dropdown div {
+  cursor: pointer;
+  height: 25px;
+  line-height: 30px;
+  color: #333333;
+  transition: background-color 0.3s;
+}
+  .add-gender-dropdown div {
+    cursor: pointer;
+    height: 25px;
+    line-height: 30px;
+    color: #333333;
+    transition: background-color 0.3s;
+  }
+  .add-gender-dropdown div:hover {
+    background-color: #007DFA;
+    color: #ffffff;
+  }
+  .add-location-dropdown div:hover {
+    background-color: #007DFA;
+    color: #ffffff;
+  }
+  .add-selected-gender {
+    position: absolute;
+    top: 50%;
+    left: 49px;
+    transform: translateY(-50%);
+    font-size: 13px;
+  }
+  .add-c-code {
+    display: flex;
+    align-items: center;
+    margin-left: 12px;
+    margin-right: 20px;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  .add-c-code img {
+    margin-right: 5px;
+    margin-left: 1px;
+    width: 22px;
+  }
+  
+  .add-c-code input {
+    outline: none;
+    border: none;
+    width: 150px;
+    height: 20px;
+    border: none;
+    margin-left: 5px;
+  }
+  .add-location-icon{
+    width: 15px;
+  }
+  .add-select-date {
+    position: absolute;
+    top: 50%;
+    right: 1px;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+  
+  .add-arrow-icon {
+    padding-top: 1px;
+    width: 20px;
+    padding-left: 15px;
+  }
+  
+  .add-arrow-iconn {
+    width: 20px;
+    padding-top: 1px;
+    padding-left: 15px;
+  }
+  
+  .add-submit-container {
+    display: flex;
+    gap: 30px;
+    margin: 60px auto;
+  }
+  
+  .add-submit,
+  .add-submitt {
+    color: #ffffff;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    border-radius: 10px;
+    padding-left: 13px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    line-height: 29.05px;
+    letter-spacing: 0em;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  .add-submit {
+    width: 80px;
+    margin-right: -20px;
+    padding-left: 0px;
+    color: black;
+    margin-left: 250px;
+    font-size: 16px;
+    margin-top: 30px;
+    background-color: none;
+  }
+  
+  .add-submitt {
+    width: 120px;
+    height: 4px;
+    margin-right: 7px;
+    margin-left: 10px;
+    background-color: #007DFA;
+    padding-bottom: 30px;
+    padding-left: 30px;
+    font-size: 16px;
+    margin-top: 30px;
+  }
+  
+  .add-side2 {
+    margin-left: 350px;
+    margin-top: -286px;
+  }
+  
