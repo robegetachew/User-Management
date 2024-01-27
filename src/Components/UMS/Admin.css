@@ -427,17 +427,19 @@ margin-left: 1000px;
 .user-info {
   flex-direction: column;
   width: 80%;
-  padding-top: 60%;
+  padding-top: 65%;
   margin-left: 15%;
 }
 .info-row {
   height:1%;
-padding-top: 5pxpx;
+padding-top: px;
   display: flex;
+  margin-left:-15px;
  margin-top: 5%;
-
+background-color: red;
 }
 .info-row img {
   width:20px;
   height: 20px;
+margin-top: 16px;  
 }

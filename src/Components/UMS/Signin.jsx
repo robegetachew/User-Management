@@ -11,62 +11,52 @@ const Signin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [userData, setUserData] = useState(null);
+  const [user, setUser] = useState(null);
   const handleLogin = async () => {
-    const apiUrl = 'https://3df7-196-191-60-42.ngrok-free.app/api/login';
+    const apiUrl = 'https://d00c-196-191-60-12.ngrok-free.app/api/login';
   
     if (!email || !password) {
       setIsWrongPassword(true);
       return;
     }
-  
-    const loginData = {
-      email: email,
-      password: password,
-    };
+
   
     try {
-      const response = await axios.post(apiUrl, loginData, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      const response = await axios.post("https://d00c-196-191-60-12.ngrok-free.app/api/login",  {
+      email,
+      password, 
       });
   
-      // Assume the Laravel API returns a token on successful login
-      const token = response.data.token;
+      const token = response.data.authorization.token;
+      console.log(token)
+      console.log(response.data.user)
+
+      // document.cookie = `yourCookieName=${token}; path=/; secure; HttpOnly`;
+      localStorage.setItem("token", token);
   
-      // Set the token as an HTTP-only cookie
-      document.cookie = `yourCookieName=${token}; path=/; secure; HttpOnly`;
-  
-      // Fetch user information using the token
-      const userResponse = await axios.get('https://3df7-196-191-60-42.ngrok-free.app/api/user', {
+      const userResponse = await axios.get('https://d00c-196-191-60-12.ngrok-free.app/api/login', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
   
-      // Set the user data in state
       setUserData(userResponse.data);
+      // console.log(userResponse.data)
   
       console.log('Login successful!');
-      // Redirect to Admin page for now
       navigate('/Userdata');
     } catch (error) {
       console.error('Error during login:', error);
-  
-      // Check if the error is due to incorrect email or password
       if (error.response && error.response.status === 401) {
         setIsWrongPassword(true);
       } else {
-        // Handle other types of errors here (e.g., network issues, server errors)
-        // You might want to set a different state variable for different error types
-        // For now, let's set it to false to clear the wrong password message
+       
         setIsWrongPassword(false);
       }
     }
   };
 
   useEffect(() => {
-    // You can use userData to display information in the component or elsewhere
     if (userData) {
       console.log('User Data:', userData);
     }

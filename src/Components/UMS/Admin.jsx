@@ -11,11 +11,13 @@ import UploadPicture from '../Assets/upload.png';
 import './Admin.css';
 import Adduser from './Adduser';
 import Footer from './Footer';
+import Confirm from './Confirm';
 import 'react-phone-number-input/style.css';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 import Edit from '../Assets/edit.png';
 import Delete from '../Assets/delete.png';
+
 
 const initialUsers = [
   { id: 1, name: 'Unknown', email: 'unknown@example.com', status: 'Active', role: 'Admin', activity: 'High' },
@@ -249,7 +251,10 @@ const Admin = () => {
                     </div>
                   </div>
                 </div>
-                <div className="box2">Box 2 Content</div>
+                <div className="box2">
+                  
+                <Confirm />
+                </div>
                 <div className="box3">Box 3 Content</div>
               </div>
             ) : (

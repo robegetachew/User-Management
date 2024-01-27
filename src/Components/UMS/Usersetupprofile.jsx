@@ -99,24 +99,30 @@ const Usersetupprofile = () => {
 
   const handleSaveChanges = async () => {
     try {
-      const apiUrl = 'http://your-laravel-app/api/user-setup-profile';
       const formData = new FormData();
   
       // Append form data fields
-      formData.append('fullName', fullName);
-      formData.append('gender', selectedGender);
-      formData.append('phoneNumber', phoneNumber);
-      formData.append('birthdate', birthdate);
-      formData.append('location', selectedLocation ? selectedLocation.label : '');
-      formData.append('picture', selectedPicture);
+      // formData.append('fullName', fullName);
+      // formData.append('gender', selectedGender);
+      // formData.append('phoneNumber', phoneNumber);
+      // formData.append('birthdate', birthdate);
+      // formData.append('location', selectedLocation ? selectedLocation.label : '');
+      // formData.append('picture', selectedPicture);
   
       // Make the HTTP request
-      const response = await axios.post(apiUrl, formData, {
+      const token = localStorage.getItem(token);
+      console.log(token)
+
+      const response = await axios.post('https://d00c-196-191-60-12.ngrok-free.app/api/register', 
+      {
+        fullName,selectedGender,phoneNumber,birthdate,selectedPicture,selectedLocation
+      },
+      {
         headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${localStorage.getItem('yourAuthToken')}`,
+          Authorization: `Bearer ${token}`,
         },
-      });
+      }
+      );
   
       console.log('Profile setup successful:', response.data);
       // Handle success, e.g., show a success message, navigate to another page, etc.

@@ -58,7 +58,7 @@ const Registration = () => {
 
   const handleRegister = async () => {
     try {
-      const apiUrl = 'https://9e7e-196-191-60-2.ngrok-free.app/api/register';
+      const apiUrl = 'https://d00c-196-191-60-12.ngrok-free.app/api/register';
       const registrationData = {
         email: email,
         name: username,
@@ -79,13 +79,11 @@ const Registration = () => {
       document.cookie = `yourCookieName=${token}; path=/; secure; HttpOnly`;
       console.log('Signup successful!');
 
-      // Redirect to the desired page (replace '/Usersetupprofile' with your actual route)
+      
       navigate('/Usersetupprofile');
     } catch (error) {
-      // Handle error
       if (error.response) {
-        // The request was made, but the server responded with a status code
-        // that falls out of the range of 2xx
+        
         if (error.response.status === 422 && error.response.data.errors.email) {
           // Handle case where email is already taken
           setEmailError('Email is already taken. Please use a different email.');
