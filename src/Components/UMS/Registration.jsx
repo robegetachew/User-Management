@@ -74,6 +74,7 @@ const Registration = () => {
 
       // Assuming Laravel returns a token on successful registration
       const token = response.data.access_token;
+      console.log(token)
 
       // Set the token as a cookie or store it in local storage as needed
       document.cookie = `yourCookieName=${token}; path=/; secure; HttpOnly`;
