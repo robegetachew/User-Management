@@ -154,6 +154,7 @@ const Adduser = ({ className, style, onCancel, onSave }) => {
       });
   };
 
+  
   return (
     <div className={`Adduser ${style || ''}`}>
       <div className='add-container'>
@@ -166,10 +167,10 @@ const Adduser = ({ className, style, onCancel, onSave }) => {
           </div>
           <div className='add-txts'>Gender</div>
           <div
-            className={`input add-gender-input ${isGenderDropdownOpen ? 'open' : ''}`}
+            className={`add-gender-input ${isGenderDropdownOpen ? 'open' : ''}`}
             style={{ zIndex: zIndexGender }}
           >
-            <img src={gender} alt='' />
+            <img src={gender}  className= 'add-location-icon' alt='' />
             <div className='add-gender-button' onClick={handleGenderButtonClick}>
               <img
                 className='add-arrow-icon'
@@ -233,7 +234,7 @@ const Adduser = ({ className, style, onCancel, onSave }) => {
           </div>
             <div className='add-txts'>Location</div>
           <div
-            className={`input add-gender-input ${isGenderDropdownOpen ? 'open' : ''}`}
+            className={` add-gender-input ${isGenderDropdownOpen ? 'open' : ''}`}
             style={{ zIndex: zIndexGender }}
           >
             <img src={location_icon} alt='Location' className='add-location-icon' />

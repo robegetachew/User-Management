@@ -3,7 +3,6 @@ import CubeIcon from '../Assets/cube.png';
 import PasswordIcon from '../Assets/pwd.png';
 import UploadPicture from '../Assets/upload.png';
 import './User.css'; // Make sure to create User.css for styling
-
 const User = () => {
   const [profilePicture, setProfilePicture] = useState(null);
 

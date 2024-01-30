@@ -10,13 +10,21 @@
   
   .confirm-input {
     display: flex;
-    width: 406px;
+    width: 250px;
     height: 30px;
     border: 3px solid #007DFA;
     border-radius: 10px;
     margin-left: 20px;
   }
   
+  .confirm-input img{
+    width: 25px;
+  }
+  .second-side{
+    margin-left: 300px;
+    margin-top: -155px;
+  }
+
   .confirm-txts {
     margin-left: 75px;
     font-family: 'Inter', sans-serif;
@@ -26,7 +34,7 @@
     letter-spacing: 0em;
     text-align: left;
     margin-bottom: 10px;
-    margin-top: 20px;
+    margin-top: 10px;
   }
   
   .confirm-text {
@@ -35,7 +43,6 @@
     font-size: 24px;
     margin-bottom: 10px;
     margin-left: 230px;
-    padding-top: 40px;
     font-family: 'Inter', sans-serif;
   }
   .confirm-inputs {
@@ -47,7 +54,6 @@
   .confirm-input {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
     margin-left: 70px;
     font-family: 'Inter', sans-serif;
   }
@@ -70,7 +76,7 @@
     outline: none;
     border: none;
     width: 340px;
-    height: 25px;
+    height: 20px;
   }
   
   .confirm-input:last-child {

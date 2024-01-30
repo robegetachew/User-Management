@@ -19,8 +19,7 @@ import axios from 'axios';
 
 
 const Usersetupprofile = () => {
-  const navigate= useNavigate();
-
+  const navigate = useNavigate();
   const [fullName, setFullName] = useState('');
   const [selectedGender, setSelectedGender] = useState('');
   const [isGenderDropdownOpen, setIsGenderDropdownOpen] = useState(false);
@@ -38,11 +37,7 @@ const Usersetupprofile = () => {
     const fetchCountries = async () => {
       try {
         const response = await axios.get('https://restcountries.com/v3.1/all');
-        const countryOptions = response.data.map(country => ({
-          value: country.cca2,
-          label: country.name.common,
-        }));
-        setCountries(countryOptions);
+        setCountries(response.data.map(country => ({ value: country.cca2, label: country.name.common })));
       } catch (error) {
         console.error('Error fetching countries:', error);
       }
@@ -79,14 +74,9 @@ const Usersetupprofile = () => {
     setZIndexLocation(1);
   };
 
-  const handlePictureChange = (event) => {
-    const file = event.target.files[0];
-    setSelectedPicture(file);
-  };
+  const handlePictureChange = (event) => setSelectedPicture(event.target.files[0]);
 
-  const handleFullNameChange = (event) => {
-    setFullName(event.target.value);
-  };
+  const handleFullNameChange = (event) => setFullName(event.target.value);
 
   const handleClear = () => {
     setFullName('');
@@ -100,40 +90,37 @@ const Usersetupprofile = () => {
   const handleSaveChanges = async () => {
     try {
       const formData = new FormData();
+      formData.append('picture', selectedPicture);
   
-      // Append form data fields
-      // formData.append('fullName', fullName);
-      // formData.append('gender', selectedGender);
-      // formData.append('phoneNumber', phoneNumber);
-      // formData.append('birthdate', birthdate);
-      // formData.append('location', selectedLocation ? selectedLocation.label : '');
-      // formData.append('picture', selectedPicture);
+      const data = {
+        fullName,
+        gender: selectedGender,
+        phoneNumber,
+        birthdate,
+        location: selectedLocation ? selectedLocation.label : '',
+      };
   
-      // Make the HTTP request
-      const token = localStorage.getItem(token);
-      console.log(token)
-
-      const response = await axios.post('https://d00c-196-191-60-12.ngrok-free.app/api/register', 
-      {
-        fullName,selectedGender,phoneNumber,birthdate,selectedPicture,selectedLocation
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      Object.entries(data).forEach(([key, value]) => formData.append(key, value));
+  
+      await axios.post(
+        'https://laravelbackend/api/info',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
       );
   
-      console.log('Profile setup successful:', response.data);
-      // Handle success, e.g., show a success message, navigate to another page, etc.
+      console.log('Profile setup successful');
+      // Navigate to Userdashboard after successful setup
+      navigate('/Userdashboard');
     } catch (error) {
-      // Handle errors
       console.error('Error setting up profile:', error);
-      // Display an error message to the user
+      // Handle errors
     }
   };
-
-
   return (
     <div className='container'>
       <div className="header">

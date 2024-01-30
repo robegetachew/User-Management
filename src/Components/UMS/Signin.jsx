@@ -4,53 +4,44 @@ import emailIcon from '../Assets/email.png';
 import passwordIcon from '../Assets/password.png';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import Userdata from './Userdata';
+
 const Signin = () => {
   const navigate = useNavigate();
   const [isWrongPassword, setIsWrongPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [userData, setUserData] = useState(null);
-  const [user, setUser] = useState(null);
+
   const handleLogin = async () => {
-    const apiUrl = 'https://d00c-196-191-60-12.ngrok-free.app/api/login';
+    const apiUrl = 'https://492d-196-189-87-177.ngrok-free.app/api/login';
   
     if (!email || !password) {
       setIsWrongPassword(true);
       return;
     }
 
-  
     try {
-      const response = await axios.post("https://d00c-196-191-60-12.ngrok-free.app/api/login",  {
-      email,
-      password, 
-      });
-  
-      const token = response.data.authorization.token;
-      console.log(token)
-      console.log(response.data.user)
-
-      // document.cookie = `yourCookieName=${token}; path=/; secure; HttpOnly`;
-      localStorage.setItem("token", token);
-  
-      const userResponse = await axios.get('https://d00c-196-191-60-12.ngrok-free.app/api/login', {
+      const response = await axios.post(apiUrl, {
+        email,
+        password,
+      }, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
         },
       });
-  
-      setUserData(userResponse.data);
-      // console.log(userResponse.data)
-  
+
+      const token = response.data.authorization.token;
+      localStorage.setItem("token", token);
+
+      setUserData(response.data.user);
+
       console.log('Login successful!');
-      navigate('/Userdata');
+      navigate('/Admin');
     } catch (error) {
       console.error('Error during login:', error);
       if (error.response && error.response.status === 401) {
         setIsWrongPassword(true);
       } else {
-       
         setIsWrongPassword(false);
       }
     }
@@ -92,7 +83,6 @@ const Signin = () => {
           </div>
         )}
       </div>
-      {userData && <Userdata userData={userData} />}
     </div>
   );
 };

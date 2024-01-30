@@ -17,7 +17,8 @@ import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 import Edit from '../Assets/edit.png';
 import Delete from '../Assets/delete.png';
-
+import { useAuth } from './Auth-context';
+import Header from './Header';
 
 const initialUsers = [
   { id: 1, name: 'Unknown', email: 'unknown@example.com', status: 'Active', role: 'Admin', activity: 'High' },
@@ -81,7 +82,7 @@ const UserTable = ({ users, handleEdit, handleDelete, handleAddUser }) => (
               <img
                 src={Edit}
                 alt="Edit Icon"
-                onClick={() => handleEdit(user)}
+                onClick={() => handleEdit(user.id)}
                 style={{ cursor: 'pointer' }}
               />
               {/* Delete icon */}
@@ -106,9 +107,10 @@ const AddUserForm = ({ handleCancel, handleSave }) => (
       <Adduser onCancel={handleCancel} onSave={handleSave} />
     </div>
   </div>
-);
+ );
 
 const Admin = () => {
+  
   const [searchInput, setSearchInput] = useState('');
   const [roleFilter, setRoleFilter] = useState('All');
   const [statusFilter, setStatusFilter] = useState('All');
@@ -118,20 +120,19 @@ const Admin = () => {
   const [activityData, setActivityData] = useState(initialActivityData);
   const [selectedUser, setSelectedUser] = useState(null);
   const [profilePicture, setProfilePicture] = useState(null);
-
+  const [profilePicturePath, setProfilePicturePath] = useState(null);
   useEffect(() => {
     
   }, []);
 
   const handleSaveChanges = async () => {
-    // Handle saving changes to the backend (not implemented in this example)
-    // Replace 'YOUR_BACKEND_API_URL' with your actual backend API URL
+   
     console.log('Save Changes clicked. Data not sent to backend.');
   };
   const [showEditModal, setShowEditModal] = useState(false);
 
-  const handleEdit = (user) => {
-    setSelectedUser(user);
+  const handleEdit = (userId) => {
+    setSelectedUser(userId);
     setShowEditModal(true);
   };
 
@@ -140,28 +141,21 @@ const Admin = () => {
   };
 
   const handleEditSave = () => {
-    // Implement logic to save the edited user (not implemented in this example)
-    // For example, you can send a request to your backend
+    
     console.log("Save edited user logic goes here.");
-    // After saving, you can close the modal
     setShowEditModal(false);
   };
 
   const handleAddUser = () => {
-    // Set the state to show the user addition form
     setShowAddUserForm(true);
   };
 
   const handleCancelAddUser = () => {
-    // Set the state to hide the user addition form
     setShowAddUserForm(false);
   };
 
   const handleSaveAddUser = () => {
-    // Implement logic to save the new user (not implemented in this example)
-    // For example, you can send a request to your backend
     console.log("Save new user logic goes here.");
-    // After saving, you can hide the form
     setShowAddUserForm(false);
   };
 
@@ -199,218 +193,181 @@ const Admin = () => {
     setUsers(filteredUsers);
   };
 
-  const renderActiveSection = () => {
-    switch (activeSection) {
-      case 'Users':
-        return (
-          <div className='ad-user-activity-container'>
-            {showAddUserForm ? (
-              <AddUserForm
-                handleCancel={handleCancelAddUser}
-                handleSave={handleSaveAddUser}
+  const components = {
+    Users: () => (
+      <div className='ad-user-activity-container'>
+        {showAddUserForm ? (
+          <AddUserForm
+            handleCancel={handleCancelAddUser}
+            handleSave={handleSaveAddUser}
+          />
+        ) :  showEditModal ? (
+          <div>
+            <div className="box1">
+              <img
+                src={selectedUser ? selectedUser.profilePicture || "../Assets/person.png" : "../Assets/person.png"}
+                alt=""
+                className="user-profile-picture"
               />
-            ) :  showEditModal ? (
-              <div>
-                <div className="box1">
-                  {/* Profile Picture */}
-                  <img
-                    src={selectedUser ? selectedUser.profilePicture || "../Assets/person.png" : "../Assets/person.png"}
-                    alt=""
-                    className="user-profile-picture"
-                  />
-
-                  {/* User Information */}
-                  <div className="user-info">
-                    <div className='info-row'>
-                    <p>{selectedUser ? selectedUser.name : 'Unknown'}</p></div>
-                    {/* Gender */}
-                    <div className="info-row">
-                      <img src={GenderIcon} alt="Gender Icon" />
-                      <p>{selectedUser ? selectedUser.gender : 'N/A'}</p>
-                    </div>
-                 {/* Location */}
-                  <div className="info-row">
-                <p>{selectedUser ? selectedUser.location : 'N/A'}</p>
-              </div>
-                    {/* Activity Status */}
-                    <div className="info-row">
-                      <img src={ActivityIcon} alt="Activity Status Icon" />
-                      <p>{selectedUser ? selectedUser.activityStatus : 'N/A'}</p>
-                    </div>
-
-                    {/* Phone Number */}
-                    <div className="info-row">
-                      <img src={PhoneNumberIcon} alt="Phone Number Icon" />
-                      <p>{selectedUser ? selectedUser.phoneNumber : 'N/A'}</p>
-                    </div>
-
-                    {/* Email */}
-                    <div className="info-row">
-                      <img src={EmailIcon} alt="Email Icon" />
-                      <p>{selectedUser ? selectedUser.email : 'N/A'}</p>
-                    </div>
-                  </div>
+              <div className="user-info">
+                <div className='info-row'>
+                <p>{selectedUser ? selectedUser.name : 'Unknown'}</p></div>
+                <div className="info-row">
+                  <img src={GenderIcon} alt="Gender Icon" />
+                  <p>{selectedUser ? selectedUser.gender : 'N/A'}</p>
                 </div>
-                <div className="box2">
-                  
-                <Confirm />
-                </div>
-                <div className="box3">Box 3 Content</div>
-              </div>
-            ) : (
-              <div>
-                <div className="ad-search-and-filter">
-                  <div className='ad-search'>
-                    <Form.Control
-                      type="text"
-                      placeholder="Search User"
-                      value={searchInput}
-                      onChange={(e) => setSearchInput(e.target.value)}
-                    />
-                    <Button variant="primary" onClick={handleSearch}>
-                      Search
-                    </Button>
-                  </div>
-                  <div className='ad-role-status-filter'>
-                    <Form.Control
-                      as="select"
-                      value={roleFilter}
-                      onChange={(e) => setRoleFilter(e.target.value)}
-                    >
-                      <option value="All">Roles</option>
-                      <option value="Admin">Admin</option>
-                      <option value="User">User</option>
-                    </Form.Control>
-                    <Form.Control
-                      as="select"
-                      value={statusFilter}
-                      onChange={(e) => setStatusFilter(e.target.value)}
-                    >
-                      <option value="All">Status</option>
-                      <option value="Active">Active</option>
-                      <option value="Inactive">Inactive</option>
-                    </Form.Control>
-                    <Button variant="primary" onClick={handleFilter}>
-                      Filter
-                    </Button>
-                  </div>
-                </div>
-                <div className="usertable">
-                  <UserTable
-                    users={users}
-                    handleEdit={handleEdit}
-                    handleDelete={handleDelete}
-                    handleAddUser={handleAddUser}
-                  />
-                </div>
-              </div>
-            )}
+              <div className="info-row">
+            <p>{selectedUser ? selectedUser.location : 'N/A'}</p>
           </div>
-        );
-      case 'UserActivity':
-        return (
-          <div className='ad-user-activity-container'>
-            <ActivityTable activityData={activityData} />
-          </div>
-        );
-      case 'Profile':
-        return (
-          <div className='ad-user-activity-container'>
-            <div className="ad-profile-section">
-              <div className="ad-profile-box">
-                {/* Content for the first box */}
-                <label htmlFor="profile-picture" className="ad-profile-picture">
-                  <input
-                    type="file"
-                    id="profile-picture"
-                    accept="image/*"
-                    onChange={handleAddPicture}
-                    style={{ display: 'none' }}
-                  />
-                  <img src={profilePicture || "../Assets/person.png"} alt="Profile Picture" />
-                </label>
-
-                {/* Upload picture icon */}
-                <div className="upload-icon-container">
-                  <label htmlFor="profile-picture" className="upload-icon-label">
-                    <img src={UploadPicture} alt="Upload Icon" className="upload-icon" />
-                  </label>
+                <div className="info-row">
+                  <img src={ActivityIcon} alt="Activity Status Icon" />
+                  <p>{selectedUser ? selectedUser.activityStatus : 'N/A'}</p>
                 </div>
-              </div>
-
-              <div className="ad-update-profile-box">
-                <div className='update-title'>
-                  Update profile
+                <div className="info-row">
+                  <img src={PhoneNumberIcon} alt="Phone Number Icon" />
+                  <p>{selectedUser ? selectedUser.phoneNumber : 'N/A'}</p>
                 </div>
-                <div className='aduser'>
-                  <Adduser
-                    className="additional-class-for-all-instances"
-                    style="style2"  // or "style2" for different instances
-                    onCancel={handleCancelAddUser}
-                    onSave={handleSaveAddUser}
-                  />
+                <div className="info-row">
+                  <img src={EmailIcon} alt="Email Icon" />
+                  <p>{selectedUser ? selectedUser.email : 'N/A'}</p>
                 </div>
               </div>
             </div>
+            <div className="box2">
+              <Confirm />
+            </div>
+            <div className="box3">Box 3 Content</div>
           </div>
-        );
-      default:
-        return null;
-    }
+        ) : (
+          <div>
+            
+            <div className="usertable">
+            <div className="ad-search-and-filter">
+              <div className='ad-search'>
+                <Form.Control
+                  type="text"
+                  placeholder="Search User"
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                />
+                <Button variant="primary" onClick={handleSearch}>
+                  Search
+                </Button>
+              </div>
+              <div className='ad-role-status-filter'>
+                <Form.Control
+                  as="select"
+                  value={roleFilter}
+                  onChange={(e) => setRoleFilter(e.target.value)}
+                >
+                  <option value="All">Roles</option>
+                  <option value="Admin">Admin</option>
+                  <option value="User">User</option>
+                </Form.Control>
+                <Form.Control
+                  as="select"
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                >
+                  <option value="All">Status</option>
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                </Form.Control>
+                <Button variant="primary" onClick={handleFilter}>
+                  Filter
+                </Button>
+              </div>
+            </div>
+              <UserTable
+                users={users}
+                handleEdit={handleEdit}
+                handleDelete={handleDelete}
+                handleAddUser={handleAddUser}
+              />
+            </div>
+          </div>
+        )}
+      </div>
+    ),
+    UserActivity: () => (
+      <div className='ad-user-activity-container'>
+        <ActivityTable activityData={activityData} />
+      </div>
+    ),
+    Profile: () => (
+      <div className='ad-user-activity-container'>
+        <div className="ad-profile-section">
+          <div className="ad-profile-box">
+            <label htmlFor="profile-picture" className="ad-profile-picture">
+          <input
+            type="file"
+            id="profile-picture"
+            accept="image/*"
+            onChange={handleAddPicture}
+            style={{ display: 'none' }}
+          />
+          <img src={profilePicture || "../Assets/person.png"} alt="Profile Picture" />
+        </label>
+        <div className="upload-icon-container">
+          <label htmlFor="profile-picture" className="upload-icon-label">
+            <img src={UploadPicture} alt="Upload Icon" className="upload-icon" />
+          </label>
+            </div>
+          </div>
+          <div className="ad-update-profile-box">
+            <div className='update-title'>
+              Update profile
+            </div>
+            <div className='aduser'>
+              <Adduser
+                className="additional-class-for-all-instances"
+                style="style2"  
+                onCancel={handleCancelAddUser}
+                onSave={handleSaveAddUser}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    ),
   };
 
   return (
     <div className="ad-admin-container">
-      <header className="ad-header">       
-        <h1>
-          <span role="img" aria-label="cube icon" className="ad-icon">
-            <img src={CubeIcon} alt="Cube Icon" />
-          </span>
-          UMS
-        </h1>
-      </header>
+    <Header profilePicturePath={profilePicturePath} />
       <div className='ad-container'>
         <nav>
           <ul>
-            <li
-              className={`ad-li-container ${
-                activeSection === 'Users' ? 'ad-active' : ''
-              }`}
-              onClick={() => handleSectionChange('Users')}
-            >
-              <img src={UserProfileIcon} alt="User Icon" />
-              <div className='ad-txt'>
-                Users
-              </div>
-            </li>
-            <li
-              className={`ad-li-container ${
-                activeSection === 'UserActivity' ? 'ad-active' : ''
-              }`}
-              onClick={() => handleSectionChange('UserActivity')}
-            >
-              <img src={ActivityIcon} alt="Activity Icon" />
-              <div className='ad-txt'>
-                User Activity
-              </div>
-            </li>
-            <li
-              className={`ad-li-container ${
-                activeSection === 'Profile' ? 'ad-active' : ''
-              }`}
-              onClick={() => handleSectionChange('Profile')}
-            >
-              <img src={PasswordIcon} alt="Password Icon" />
-              <div className='ad-txt'>
-                My Profile
-              </div>
-            </li>
+            {Object.keys(components).map((section) => (
+              <li
+                key={section}
+                className={`ad-li-container ${
+                  activeSection === section ? 'ad-active' : ''
+                }`}
+                onClick={() => handleSectionChange(section)}
+              >
+                <img src={getIcon(section)} alt={`${section} Icon`} />
+                <div className='ad-txt'>
+                  {section}
+                </div>
+              </li>
+            ))}
           </ul>
         </nav>
-        {renderActiveSection()}
+        {components[activeSection]()}
       </div>
       <Footer />
     </div>
   );
 };
+
 export default Admin;
+
+function getIcon(section) {
+  const icons = {
+    Users: UserProfileIcon,
+    UserActivity: ActivityIcon,
+    Profile: PasswordIcon,
+  };
+  return icons[section];
+}

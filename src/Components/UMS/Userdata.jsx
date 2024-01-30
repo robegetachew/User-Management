@@ -1,15 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const Userdata = ({ userData }) => {
+  useEffect(() => {
+    console.log('Received userData:', userData);
+  }, [userData]);
+
   return (
     <div>
       <h1>User Information</h1>
-      {userData && (
+      {userData ? (
         <div>
           <p>Email: {userData.email}</p>
           <p>Name: {userData.name}</p>
-          {/* Add other user information as needed */}
+          {/* Display other user information as needed */}
         </div>
+      ) : (
+        <p>Loading user data...</p>
       )}
     </div>
   );

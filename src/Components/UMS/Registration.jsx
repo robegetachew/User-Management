@@ -58,7 +58,7 @@ const Registration = () => {
 
   const handleRegister = async () => {
     try {
-      const apiUrl = 'https://d00c-196-191-60-12.ngrok-free.app/api/register';
+      const apiUrl = 'https://dfd0-196-191-60-39.ngrok-free.app/api/register';
       const registrationData = {
         email: email,
         name: username,
