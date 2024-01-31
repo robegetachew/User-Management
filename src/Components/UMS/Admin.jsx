@@ -313,6 +313,7 @@ const Admin = () => {
             <img src={UploadPicture} alt="Upload Icon" className="upload-icon" />
           </label>
             </div>
+            
           </div>
           <div className="ad-update-profile-box">
             <div className='update-title'>

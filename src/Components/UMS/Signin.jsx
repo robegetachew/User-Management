@@ -3,7 +3,7 @@ import './Signin.css';
 import emailIcon from '../Assets/email.png';
 import passwordIcon from '../Assets/password.png';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'; 
 
 const Signin = () => {
   const navigate = useNavigate();
@@ -14,7 +14,7 @@ const Signin = () => {
 
   const handleLogin = async () => {
     const apiUrl = 'https://492d-196-189-87-177.ngrok-free.app/api/login';
-  
+
     if (!email || !password) {
       setIsWrongPassword(true);
       return;
@@ -36,7 +36,6 @@ const Signin = () => {
       setUserData(response.data.user);
 
       console.log('Login successful!');
-      navigate('/Admin');
     } catch (error) {
       console.error('Error during login:', error);
       if (error.response && error.response.status === 401) {
@@ -50,8 +49,10 @@ const Signin = () => {
   useEffect(() => {
     if (userData) {
       console.log('User Data:', userData);
+      // Navigate to the Admin page after displaying user data
+      navigate('/Userdata');
     }
-  }, [userData]);
+  }, [userData, navigate]);
 
   return (
     <div className="signin-container">
@@ -86,5 +87,4 @@ const Signin = () => {
     </div>
   );
 };
-
 export default Signin;

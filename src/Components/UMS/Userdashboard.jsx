@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import UserProfileIcon from '../Assets/userprofile.png';
+import Update from '../Assets/update.png';
 import ActivityIcon from '../Assets/activity.png';
 import Header from './Header';
 import Footer from './Footer';
@@ -9,9 +10,9 @@ import './Userdashboard.css';
 
 
 const EmptyBox = ({ section }) => {
+  
   const [profilePicture, setProfilePicture] = useState(null);
 
-  // Function to handle profile picture upload
   const handleProfilePictureChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -94,7 +95,7 @@ const Userdashboard = (props) => {
               </a>
               <a onClick={() => handleSectionClick('Update profile')}>
                 <li className={`ad-li-container ${activeSection === 'Update profile' ? 'ad-active' : ''}`}>
-                  <img src={ActivityIcon} alt="Activity Icon" />
+                  <img src={Update} alt="Activity Icon" />
                   <div className='ad-txt'>
                     Update profile
                   </div>

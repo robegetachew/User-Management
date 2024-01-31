@@ -7,7 +7,9 @@ body {
     align-items: center;
     justify-content: center;
   }
-  
+  .Adduser{
+margin-left: 70px;
+  }
   .add-input {
     display: flex;
     width: 270px;
@@ -193,8 +195,8 @@ body {
   .add-submit-container {
     display: flex;
     gap: 30px;
-    margin: 60px auto;
     margin-left: 200px;
+    padding-top: -70px
   }
   
   .add-submit,
@@ -206,7 +208,6 @@ body {
     font-size: 20px;
     border-radius: 10px;
     padding-left: 13px;
-    padding-top: 10px;
     padding-bottom: 10px;
     line-height: 29.05px;
     letter-spacing: 0em;
@@ -220,12 +221,12 @@ body {
     color: black;
     margin-left: 250px;
     font-size: 16px;
-    margin-top: 30px;
+    margin-top: 10px;
     background-color: none;
   }
   
   .add-submitt {
-    width: 120px;
+    width: 70px;
     height: 4px;
     margin-right: 7px;
     margin-left: 10px;
@@ -233,11 +234,11 @@ body {
     padding-bottom: 30px;
     padding-left: 30px;
     font-size: 16px;
-    margin-top: 30px;
+    margin-top: 10px;
   }
   
   .add-side2 {
     margin-left: 350px;
-    margin-top: -284px;
+    margin-top: -283px;
   }
   
