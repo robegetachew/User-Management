@@ -7,6 +7,8 @@ import Usersetupprofile from './Components/UMS/Usersetupprofile';
 import Admin from './Components/UMS/Admin'
 import Wrongpassword from './Components/UMS/Wrongpassword';
 import Adduser from './Components/UMS/Adduser';
+import Profileview from './Components/UMS/Profileview';
+
 import Header from './Components/UMS/Header';
 import Userdata from './Components/UMS/Userdata';
 import Users from './Components/UMS/Users';
@@ -25,19 +27,17 @@ import EditUser from './Components/UMS/EditUser';
 
 function App() {
   return (
-    <UserProvider>
     <Routes>
    
 
-      <Route path="/" element={<Registration/>}></Route>
+      <Route path="/" element={<Signin/>}></Route>
       <Route path="/registration" element={<Registration/>}></Route>
 
       <Route path="/signin" element={<Signin/>}></Route>
       <Route path="/usersetupprofile" element={<Usersetupprofile/>}></Route>
       <Route path="/forgetpassword" element={<Forgetpassword/>}></Route>
-
+      <Route path="/profileview" element={<Profileview/>}></Route>
       <Route path="/resetpassword" element={<Resetpassword/>}></Route>
-
       <Route path="/wrongpassword" element={<Wrongpassword/>}></Route>
       <Route path="/adduser" element={<Adduser/>}></Route>
       <Route path="/userdata" element={<Userdata />}>  </Route>
@@ -52,7 +52,6 @@ function App() {
       <Route path="/Admin" element={<Admin/>}></Route>
 
     </Routes>
-    </UserProvider>
   );
 }
 

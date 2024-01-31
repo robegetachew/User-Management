@@ -1,50 +1,64 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Navigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
-const Userdata = ({ userData }) => {
+const Userdata = () => {
+  const [isAuth, setIsAuth] = useState(false);
+  const [userdata, setUserdata] = useState(null);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
-    console.log('Received userData:', userData);
-  }, [userData]);
+    // Move the declaration of access_token inside the useEffect
+    const access_token = Cookies.get('access_token'); // Get token from cookies
+    setIsAuth(!!access_token);
+
+    if (access_token) {
+      fetchUserData(access_token); // Pass token to fetchUserData
+    }
+  }, []); // Remove access_token as a dependency
+
+  const fetchUserData = async (access_token) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch('https://b1f1-196-189-87-177.ngrok-free.app/api/profile', {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch profile data');
+      }
+      
+      console.log(response.data)
+
+      // const data = await response.json();
+      // setUserdata(data.data); // Assuming the user data is within a "user" property
+    } catch (error) {
+      setError(error.message);
+      // console.error('Error fetching profile data', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div>
       <h1>User Information</h1>
-      {userData ? (
+      <h2>Authenticated: {isAuth.toString()} : that is why u r here</h2>
+      {isLoading && <p>Loading user data...</p>}
+      {error && <p>Error: {error}</p>}
+      {userdata && (
         <div>
-          <p>Email: {userData.email}</p>
-          <p>Name: {userData.username}</p>
-          {/* Display other user information as needed */}
+          <h3>Name: {userdata.name}</h3>
+          <h3>Email: {userdata.email}</h3>
         </div>
-      ) : (
-        <p>Loading user data...</p>
       )}
     </div>
   );
 };
 
 export default Userdata;
-
-// import React, { useEffect } from 'react';
-// import Signin from './Signin';
-
-// const Userdata = ({ userData }) => {
-//   useEffect(() => {
-//     console.log('Received userData:', userData);
-//   }, [userData]);
-
-//   return (
-//     <div>
-//       <h1>User Information</h1>
-//       {userData ? (
-//         <div>
-//           <p>Email: {userData.email}</p>
-//           <p>Name: {userData.name}</p>
-//           {/* Display other user information as needed */}
-//         </div>
-//       ) : (
-//         <p>Loading user data...</p>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default Userdata;

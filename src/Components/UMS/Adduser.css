@@ -44,6 +44,7 @@ margin-left: 70px;
   
   .add-inputs {
     display: flex;
+    margin-left: -70px;
     flex-direction: column;
     font-family: 'Inter', sans-serif;
   }
@@ -217,9 +218,8 @@ margin-left: 70px;
   .add-submit {
     width: 80px;
     margin-right: -20px;
-    padding-left: 0px;
     color: black;
-    margin-left: 250px;
+    margin-left: 100px;
     font-size: 16px;
     margin-top: 10px;
     background-color: none;
@@ -238,7 +238,7 @@ margin-left: 70px;
   }
   
   .add-side2 {
-    margin-left: 350px;
+    margin-left: 250px;
     margin-top: -283px;
   }
   

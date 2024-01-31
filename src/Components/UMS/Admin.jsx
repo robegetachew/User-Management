@@ -8,10 +8,21 @@ import GenderIcon from '../Assets/genderr.png';
 import PhoneNumberIcon from '../Assets/phonee.png';
 import EmailIcon from '../Assets/emaill.png'
 import UploadPicture from '../Assets/upload.png';
+
+import person from '../Assets/person.png';
+import { useUser } from '../../UserContext';
+import separator from '../Assets/separator.png';
+import roleIcon from '../Assets/user.png';
+import activityStatusIcon from '../Assets/acstatus.png';
+import genderIcon from '../Assets/male.png';
+import emailIcon from '../Assets/email.png';
+import phoneIcon from '../Assets/phone.png';
 import './Admin.css';
 import Adduser from './Adduser';
 import Footer from './Footer';
 import Confirm from './Confirm';
+import Profileview from './Myprofile';
+
 import 'react-phone-number-input/style.css';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
@@ -29,6 +40,7 @@ const initialActivityData = [
   { id: 1, username: 'Unknown', date: '2024-01-19', activity: 'Logged in' },
   { id: 2, username: 'uk1', date: '2024-01-18', activity: 'Changed picture' },
 ];
+
 
 const ActivityTable = ({ activityData }) => (
   <table className="ad-activity-table">
@@ -110,7 +122,8 @@ const AddUserForm = ({ handleCancel, handleSave }) => (
  );
 
 const Admin = () => {
-  
+  const { username, country, role, activityStatus, gender, email, phoneNumber, profilePicturePath } = useUser();
+
   const [searchInput, setSearchInput] = useState('');
   const [roleFilter, setRoleFilter] = useState('All');
   const [statusFilter, setStatusFilter] = useState('All');
@@ -120,7 +133,6 @@ const Admin = () => {
   const [activityData, setActivityData] = useState(initialActivityData);
   const [selectedUser, setSelectedUser] = useState(null);
   const [profilePicture, setProfilePicture] = useState(null);
-  const [profilePicturePath, setProfilePicturePath] = useState(null);
   useEffect(() => {
     
   }, []);
@@ -204,35 +216,40 @@ const Admin = () => {
         ) :  showEditModal ? (
           <div>
             <div className="box1">
-              <img
-                src={selectedUser ? selectedUser.profilePicture || "../Assets/person.png" : "../Assets/person.png"}
-                alt=""
-                className="user-profile-picture"
-              />
-              <div className="user-info">
-                <div className='info-row'>
-                <p>{selectedUser ? selectedUser.name : 'Unknown'}</p></div>
-                <div className="info-row">
-                  <img src={GenderIcon} alt="Gender Icon" />
-                  <p>{selectedUser ? selectedUser.gender : 'N/A'}</p>
-                </div>
-              <div className="info-row">
-            <p>{selectedUser ? selectedUser.location : 'N/A'}</p>
-          </div>
-                <div className="info-row">
-                  <img src={ActivityIcon} alt="Activity Status Icon" />
-                  <p>{selectedUser ? selectedUser.activityStatus : 'N/A'}</p>
-                </div>
-                <div className="info-row">
-                  <img src={PhoneNumberIcon} alt="Phone Number Icon" />
-                  <p>{selectedUser ? selectedUser.phoneNumber : 'N/A'}</p>
-                </div>
-                <div className="info-row">
-                  <img src={EmailIcon} alt="Email Icon" />
-                  <p>{selectedUser ? selectedUser.email : 'N/A'}</p>
-                </div>
-              </div>
-            </div>
+            <div className="proview-profile-picture" style={{ backgroundImage: `url(${profilePicturePath || person})` }}></div>
+<div className="proview-user-info">
+  <p>
+    <strong>Username:</strong> {username}
+  </p>
+  <p>
+    Country: {country}
+  </p>
+  <img src={separator} alt="" className='proview-sep' />
+  <p>
+    <img src={roleIcon} alt="Role Icon" className="proview-icon" />
+    Role: {role}
+  </p>
+  <p>
+    <img src={activityStatusIcon} alt="Activity Status Icon" className="proview-icon" />
+    Activity Status: {activityStatus}
+  </p>
+  <img src={separator} alt="" className='proview-sep' />
+  <p>
+    <img src={genderIcon} alt="Gender Icon" className="proview-icon" />
+    Gender: {gender}
+  </p>
+  <p>
+    <img src={emailIcon} alt="Email Icon" className="proview-icon" />
+    Email: {email}
+  </p>
+  <p>
+    <img src={phoneIcon} alt="Phone Icon" className="proview-icon" />
+    Phone Number: {phoneNumber}
+  </p>
+</div>
+
+    </div>
+
             <div className="box2">
               <Confirm />
             </div>
@@ -308,11 +325,9 @@ const Admin = () => {
           />
           <img src={profilePicture || "../Assets/person.png"} alt="Profile Picture" />
         </label>
-        <div className="upload-icon-container">
           <label htmlFor="profile-picture" className="upload-icon-label">
             <img src={UploadPicture} alt="Upload Icon" className="upload-icon" />
           </label>
-            </div>
             
           </div>
           <div className="ad-update-profile-box">

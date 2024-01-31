@@ -1,20 +1,20 @@
 
-.my-profile-container {
+/* .my-profile-container {
     width: 550px;
-    height: 500px;
+    height: 530px;
     margin-top: -100px;
     margin-left: 500px;
     border-radius: 16px;
     background: #FFFFFF;
     box-shadow: 20px 20px 50px 5px #00000040, -20px -20px 50px 5px #FFFFFF40;
     position: relative;
-  }
+  } */
   .sep{
     margin-left: -80px;
   }
   .profilee-picture {
-    width: 100px;
-    height: 100px;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
     position: absolute;
     top: 100px;
@@ -24,8 +24,8 @@
   }
 
   .user-info{
-    padding-left: 210px;
-    padding-top: 150px;
+    padding-left: 35%;
+    padding-top: 200px;
     font-size: 13px;
   }
   .sep{

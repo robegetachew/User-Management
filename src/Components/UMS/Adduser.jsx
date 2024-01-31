@@ -146,7 +146,6 @@ const Adduser = ({ className, style, onCancel, onSave }) => {
       .post('/api/submitUserData', formData)
       .then((response) => {
         console.log('Form data submitted successfully:', response.data);
-        // Optionally, you can navigate to another page after successful submission
         navigate('/admin');
       })
       .catch((error) => {
