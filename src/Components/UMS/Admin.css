@@ -170,7 +170,6 @@ margin-left: 0px;
     background-color:#007DFA ;
     color: white;
     border-radius: 8px;
-    margin-left: 85%;
     margin-bottom: 20px;
     cursor: pointer;
     outline: none;
@@ -208,8 +207,8 @@ margin-left: 0px;
   
   
   .ad-search{
-    margin-left: 150px;
-    margin-bottom: 10px;
+    margin-left: 520px;
+    margin-bottom: -40px;
 
   }
   
@@ -224,23 +223,12 @@ margin-left: 0px;
     cursor: pointer;
     outline: none;
   }
-  .ad-role-status-filter button {
-    height: 30px;
-    width: 100px;
-    border: 2px solid #6894D7;
-    background-color: #007DFA; 
-    color: white;
-    border-radius: 8px;
-  margin-left:50px;
-    cursor: pointer;
-    outline: none;
   
-  }
   .ad-search-and-filter select {
-    width: 150px;
+    width: 100px;
     color: black;
     height:32px;
-    margin-left: 50px;
+    margin-left: 170px;
     padding-left: 20px;
     border: 2px solid #6894D7;
     border-radius: 8px;

@@ -1,10 +1,9 @@
 // Users.jsx
 import React, { useState } from 'react';
-import { Form, Dropdown, Button } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 import Edit from '../Assets/edit.png';
 import Delete from '../Assets/delete.png';
 import Adduser from './Adduser';
-import Confirm from './Confirm';
 import 'react-phone-number-input/style.css';
 import './Admin.css'; // Make sure to include the necessary CSS file
 
@@ -67,17 +66,17 @@ const AddUserForm = ({ handleCancel, handleSave }) => (
 );
 
 const Users = ({ users = [], handleEdit, handleDelete, handleAddUser }) => {
-    const [searchInput, setSearchInput] = useState('');
-    const [roleFilter, setRoleFilter] = useState('All');
-    const [statusFilter, setStatusFilter] = useState('All');
-    const [showAddUserForm, setShowAddUserForm] = useState(false);
+  const [searchInput, setSearchInput] = useState('');
+  const [roleFilter, setRoleFilter] = useState('All');
+  const [statusFilter, setStatusFilter] = useState('All');
+  const [showAddUserForm, setShowAddUserForm] = useState(false);
 
   const handleSearch = () => {
-  
+    // Implement search logic here
   };
 
   const handleFilter = () => {
-   
+    // Implement filter logic here
   };
 
   return (

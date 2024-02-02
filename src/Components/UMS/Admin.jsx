@@ -123,6 +123,7 @@ const AddUserForm = ({ handleCancel, handleSave }) => (
 
 const Admin = () => {
   const { username, country, role, activityStatus, gender, email, phoneNumber, profilePicturePath } = useUser() || {};
+  const [filteredUsers, setFilteredUsers] = useState(initialUsers);
 
   const [searchInput, setSearchInput] = useState('');
   const [roleFilter, setRoleFilter] = useState('All');
@@ -134,8 +135,16 @@ const Admin = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [profilePicture, setProfilePicture] = useState(null);
   useEffect(() => {
-    
-  }, []);
+    filterUsers();
+  }, [roleFilter, statusFilter]);
+  const filterUsers = () => {
+    const filteredUsers = initialUsers.filter(
+      (user) =>
+        (roleFilter === 'All' || user.role === roleFilter) &&
+        (statusFilter === 'All' || user.status.toLowerCase() === statusFilter.toLowerCase())
+    );
+    setFilteredUsers(filteredUsers);
+  };
 
   const handleSaveChanges = async () => {
    
@@ -187,23 +196,29 @@ const Admin = () => {
   const handleDelete = (userId) =>
     setUsers(users.filter((user) => user.id !== userId));
 
-  const handleSearch = () => {
+    const handleSearch = () => {
+      const filteredUsers = initialUsers.filter(
+        (user) =>
+          user.name.toLowerCase().includes(searchInput.toLowerCase()) ||
+          user.email.toLowerCase().includes(searchInput.toLowerCase())
+      );
+      setFilteredUsers(filteredUsers);
+    };
+  const handleImmediateStatusFilter = () => {
     const filteredUsers = initialUsers.filter(
-      (user) =>
-        user.name.toLowerCase().includes(searchInput.toLowerCase()) ||
-        user.email.toLowerCase().includes(searchInput.toLowerCase())
+      (user) => statusFilter === 'All' || user.status.toLowerCase() === statusFilter.toLowerCase()
     );
     setUsers(filteredUsers);
   };
-
   const handleFilter = () => {
     const filteredUsers = initialUsers.filter(
       (user) =>
         (roleFilter === 'All' || user.role === roleFilter) &&
-        (statusFilter === 'All' || user.status === statusFilter)
+        (statusFilter === 'All' || user.status.toLowerCase() === statusFilter.toLowerCase())
     );
     setUsers(filteredUsers);
   };
+
 
   const components = {
     Users: () => (
@@ -257,96 +272,54 @@ const Admin = () => {
           </div>
         ) : (
           <div>
-            
             <div className="usertable">
-            <div className="ad-search-and-filter">
-              <div className='ad-search'>
-                <Form.Control
-                  type="text"
-                  placeholder="Search User"
-                  value={searchInput}
-                  onChange={(e) => setSearchInput(e.target.value)}
-                />
-                <Button variant="primary" onClick={handleSearch}>
-                  Search
-                </Button>
-              </div>
-              <div className='ad-role-status-filter'>
-                <Form.Control
-                  as="select"
-                  value={roleFilter}
-                  onChange={(e) => setRoleFilter(e.target.value)}
-                >
+              <div className="ad-search-and-filter">
+                <div className='ad-search'>
+                  <Form.Control
+                    type="text"
+                    placeholder="Search User"
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                  />
+                </div>
+                <div className='ad-role-status-filter'>
+                  <Form.Control
+                    as="select"
+                    value={roleFilter}
+                    onChange={(e) => {
+                      setRoleFilter(e.target.value);
+                    }}
+                  >
                   <option value="All">Roles</option>
                   <option value="Admin">Admin</option>
                   <option value="User">User</option>
-                </Form.Control>
-                <Form.Control
-                  as="select"
-                  value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                >
+                  </Form.Control>
+                  <Form.Control
+                    as="select"
+                    value={statusFilter}
+                    onChange={(e) => {
+                      setStatusFilter(e.target.value);
+                    }}
+                  >
                   <option value="All">Status</option>
                   <option value="Active">Active</option>
                   <option value="Inactive">Inactive</option>
                 </Form.Control>
-                <Button variant="primary" onClick={handleFilter}>
-                  Filter
-                </Button>
               </div>
             </div>
-              <UserTable
-                users={users}
-                handleEdit={handleEdit}
-                handleDelete={handleDelete}
-                handleAddUser={handleAddUser}
-              />
-            </div>
-          </div>
-        )}
-      </div>
-    ),
-    UserActivity: () => (
-      <div className='ad-user-activity-container'>
-        <ActivityTable activityData={activityData} />
-      </div>
-    ),
-    Profile: () => (
-      <div className='ad-user-activity-container'>
-        <div className="ad-profile-section">
-          <div className="ad-profile-box">
-            <label htmlFor="profile-picture" className="ad-profile-picture">
-          <input
-            type="file"
-            id="profile-picture"
-            accept="image/*"
-            onChange={handleAddPicture}
-            style={{ display: 'none' }}
-          />
-          <img src={profilePicture || "../Assets/person.png"} alt="Profile Picture" />
-        </label>
-          <label htmlFor="profile-picture" className="upload-icon-label">
-            <img src={UploadPicture} alt="Upload Icon" className="upload-icon" />
-          </label>
-            
-          </div>
-          <div className="ad-update-profile-box">
-            <div className='update-title'>
-              Update profile
-            </div>
-            <div className='aduser'>
-              <Adduser
-                className="additional-class-for-all-instances"
-                style="style2"  
-                onCancel={handleCancelAddUser}
-                onSave={handleSaveAddUser}
-              />
-            </div>
+<UserTable
+users={filteredUsers}
+handleEdit={handleEdit}
+handleDelete={handleDelete}
+handleAddUser={handleAddUser}
+/>
           </div>
         </div>
-      </div>
-    ),
-  };
+      )}
+    </div>
+  ),
+};
+
 
   return (
     <div className="ad-admin-container">

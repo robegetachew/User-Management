@@ -38,7 +38,7 @@ function App() {
       <Route path="/usersetupprofile" element={<Usersetupprofile/>}></Route>
       <Route path="/forgetpassword" element={<Forgetpassword/>}></Route>
       <Route path="/profileview" element={<Profileview/>}></Route>
-      <Route path="/resetpassword/:token/:email" element={<Resetpassword />} />
+      <Route path="/resetpassword" element={<Resetpassword />} />
 
       <Route path="/wrongpassword" element={<Wrongpassword/>}></Route>
       <Route path="/adduser" element={<Adduser/>}></Route>
