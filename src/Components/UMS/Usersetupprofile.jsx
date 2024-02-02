@@ -13,12 +13,13 @@ import 'react-datepicker/dist/react-datepicker.css';
 import x_ic from '../Assets/x.png';
 import gender from '../Assets/gender.png';
 import { useNavigate } from 'react-router-dom';
-
-
 import axios from 'axios';
-
+import 'react-datetime-picker/dist/DateTimePicker.css';
+import DateTimePicker from 'react-datetime-picker';
 
 const Usersetupprofile = () => {
+  const currentDate = new Date();
+  const maxAllowedDate = new Date(currentDate.getFullYear() - 13, currentDate.getMonth(), currentDate.getDate());
   const navigate = useNavigate();
   const [fullName, setFullName] = useState('');
   const [selectedGender, setSelectedGender] = useState('');
@@ -32,6 +33,8 @@ const Usersetupprofile = () => {
   const [selectedPicture, setSelectedPicture] = useState(null);
   const [zIndexGender, setZIndexGender] = useState(1);
   const [zIndexLocation, setZIndexLocation] = useState(1);
+  const [zIndexBirthdate, setZIndexBirthdate] = useState(1);
+
 
   useEffect(() => {
     const fetchCountries = async () => {
@@ -60,12 +63,15 @@ const Usersetupprofile = () => {
   const handleDatePickerClick = () => {
     setIsLocationDropdownOpen(false);
     setIsGenderDropdownOpen(false);
-    setIsDatePickerOpen(true);
+    setIsDatePickerOpen(!isDatePickerOpen);
+    setZIndexLocation(1);
+    setZIndexGender(1);
   };
 
   const handleLocationButtonClick = () => {
     setIsLocationDropdownOpen(!isLocationDropdownOpen);
     setZIndexLocation(isLocationDropdownOpen ? 1 : 2);
+    setZIndexGender(1);
   };
 
   const handleLocationSelect = (location) => {
@@ -91,7 +97,7 @@ const Usersetupprofile = () => {
     try {
       const formData = new FormData();
       formData.append('picture', selectedPicture);
-  
+
       const data = {
         fullName,
         gender: selectedGender,
@@ -99,11 +105,11 @@ const Usersetupprofile = () => {
         birthdate,
         location: selectedLocation ? selectedLocation.label : '',
       };
-  
+
       Object.entries(data).forEach(([key, value]) => formData.append(key, value));
-  
+
       await axios.post(
-        'https://laravelbackend/api/info',
+        'http://192.168.0.191:8000/api/info',
         formData,
         {
           headers: {
@@ -112,15 +118,14 @@ const Usersetupprofile = () => {
           },
         }
       );
-  
+
       console.log('Profile setup successful');
-      // Navigate to Userdashboard after successful setup
       navigate('/Userdashboard');
     } catch (error) {
       console.error('Error setting up profile:', error);
-      // Handle errors
     }
   };
+
   return (
     <div className='container'>
       <div className="header">
@@ -173,70 +178,80 @@ const Usersetupprofile = () => {
           </div>
         </div>
         <div className="txts">
-          Birth Date
-        </div>
-        <div className="input">
-          <img src={cal_ic} alt="Calendar" className="cal-icon" />
-          <DatePicker
-            selected={birthdate}
-            onChange={(date) => setBirthdate(date)}
-            dateFormat="dd/MM/yyyy"
-            placeholderText="Select birth date"
-            open={isDatePickerOpen}
-            onClickOutside={() => setIsDatePickerOpen(false)}
-          />
-          <div className='select-date' onClick={handleDatePickerClick}>
-            <img src={select_cal_icon} alt="Calendar" className="select-icon" />
-          </div>
-        </div>
-        <div className="txts">
-          Location
-        </div>
-        <div className={`input gender-input ${isLocationDropdownOpen ? 'open' : ''}`} style={{ zIndex: zIndexLocation }}>
-  <img src={location_icon} alt="Location" className="location-icon" />
-  <div className="gender-button" onClick={handleLocationButtonClick}>
-    <img
-      className="arrow-iconn"
-      src={isLocationDropdownOpen ? arrow_up_icon : arrow_down_icon}
-      alt="Arrow"
-    />
-  </div>
-  {selectedLocation && (
-    <div className="selected-gender">{selectedLocation.label}</div>
-  )}
-  {isLocationDropdownOpen && (
-    <div className="gender-dropdown" style={{ maxHeight: '150px', overflowY: 'auto' }}>
-      {/* Set the max height and enable scrolling */}
-      {countries.map(country => (
-        <div key={country.value} onClick={() => handleLocationSelect(country)}>
-          {country.label}
-        </div>
-      ))}
-    </div>
-  )}
-</div>
-
-<div className="txts">
-  Picture
+  Birth Date
 </div>
 <div className="input">
-  <label className="upload-btn">
-    Upload
-    <input type="file" accept="image/*" onChange={handlePictureChange} />
-  </label>
-  {selectedPicture && (
-    <div className="file-info">
-      <div className="file-name">{selectedPicture.name}</div>
-      <div className='xicon'><img
-       src={x_ic}
-        alt="Delete"
-        className="delete-icon"
-        onClick={() => setSelectedPicture(null)}
-      />
-      </div>
-    </div>
-  )}
+<img
+  src={cal_ic}
+  alt="Calendar"
+  className="cal-icon"
+  style={{ zIndex: isDatePickerOpen ? 4 : 1 }}
+  onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
+/>
+  <DatePicker
+    selected={birthdate}
+    onChange={(date) => setBirthdate(date)}
+    dateFormat="yyyy"
+    placeholderText="Select birth year"
+    showYearDropdown
+    showMonthDropdown={false}
+    yearDropdownItemNumber={15}
+    scrollableYearDropdown
+    maxDate={maxAllowedDate}
+    open={isDatePickerOpen}
+    onClickOutside={() => setIsDatePickerOpen(false)}
+  />
+  <div className='select-date' onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}>
+    <img src={select_cal_icon} alt="Calendar" className="select-icon" />
+  </div>
 </div>
+<div className="txts">
+        Location
+      </div>
+      <div className={`input gender-input ${isLocationDropdownOpen ? 'open' : ''}`} style={{ zIndex: zIndexLocation }}>
+          <img src={location_icon} alt="Location" className="location-icon" />
+          <div className="gender-button" onClick={handleLocationButtonClick}>
+            <img
+              className="arrow-iconn"
+              src={isLocationDropdownOpen ? arrow_up_icon : arrow_down_icon}
+              alt="Arrow"
+            />
+          </div>
+          {selectedLocation && (
+            <div className="selected-gender">{selectedLocation.label}</div>
+          )}
+          {isLocationDropdownOpen && (
+            <div className="gender-dropdown" style={{ maxHeight: '150px', overflowY: 'auto' }}>
+              {/* Set the max height and enable scrolling */}
+              {countries.map(country => (
+                <div key={country.value} onClick={() => handleLocationSelect(country)}>
+                  {country.label}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        <div className="txts">
+          Picture
+        </div>
+        <div className="input">
+          <label className="upload-btn">
+            Upload
+            <input type="file" accept="image/*" onChange={handlePictureChange} />
+          </label>
+          {selectedPicture && (
+            <div className="file-info">
+              <div className="file-name">{selectedPicture.name}</div>
+              <div className='xicon'><img
+                src={x_ic}
+                alt="Delete"
+                className="delete-icon"
+                onClick={() => setSelectedPicture(null)}
+              />
+              </div>
+            </div>
+          )}
+        </div>
       </div>
       <div className="submit-container">
         <div className="submit" onClick={handleClear}>Clear</div>

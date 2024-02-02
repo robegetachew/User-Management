@@ -23,7 +23,7 @@ const Userdata = () => {
     setError(null);
 
     try {
-      const response = await fetch('https://b1f1-196-189-87-177.ngrok-free.app/api/profile', {
+      const response = await fetch('http://192.168.0.191:8000/api/profile', {
         headers: {
           Authorization: `Bearer ${access_token}`,
         },
@@ -33,10 +33,10 @@ const Userdata = () => {
         throw new Error('Failed to fetch profile data');
       }
       
-      console.log(response.data)
+      console.log(response)
 
-      // const data = await response.json();
-      // setUserdata(data.data); // Assuming the user data is within a "user" property
+      const data = await response.json();
+       setUserdata(data.data); // Assuming the user data is within a "user" property
     } catch (error) {
       setError(error.message);
       // console.error('Error fetching profile data', error);

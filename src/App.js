@@ -17,6 +17,7 @@ import Userdashboard from './Components/UMS/Userdashboard';
 import SideBar from './Components/UMS/SideBar';
 import Myprofile from './Components/UMS/Myprofile';
 import { UserProvider } from './UserContext';
+import ForgetPasswordHandler from './Components/UMS/ForgetPasswordHandler';
 
 import Activity from './Components/UMS/Activity';
 
@@ -32,12 +33,13 @@ function App() {
 
       <Route path="/" element={<Signin/>}></Route>
       <Route path="/registration" element={<Registration/>}></Route>
-
+      <Route path="/forgetpassword/:token/:email" element={<ForgetPasswordHandler />} />
       <Route path="/signin" element={<Signin/>}></Route>
       <Route path="/usersetupprofile" element={<Usersetupprofile/>}></Route>
       <Route path="/forgetpassword" element={<Forgetpassword/>}></Route>
       <Route path="/profileview" element={<Profileview/>}></Route>
-      <Route path="/resetpassword" element={<Resetpassword/>}></Route>
+      <Route path="/resetpassword/:token/:email" element={<Resetpassword />} />
+
       <Route path="/wrongpassword" element={<Wrongpassword/>}></Route>
       <Route path="/adduser" element={<Adduser/>}></Route>
       <Route path="/userdata" element={<Userdata />}>  </Route>

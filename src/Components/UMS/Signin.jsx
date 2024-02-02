@@ -18,12 +18,12 @@ const Signin = () => {
       password: password
     }
     try {
-      const {data} = await axios.post("http://localhost:8000/api/login", user)
+      const {data} = await axios.post("http://192.168.0.191:8000/api/login", user)
       
       // Storing Access in cookie
       Cookies.set('access_token', data.authorization.token);
       console.log(data.authorization.token);
-      navigate("/userdata");
+      navigate("/userdashboard");
     }
     catch (error) {
       console.error("error in token fetch: ", error.message)
@@ -66,7 +66,7 @@ const Signin = () => {
         <div className="signin-forget" onClick={() => navigate('/forgetpassword')} >
           <span> Forget password?</span>
         </div>
-        <div className="signin-new-user">New User? <span > Sign Up</span></div>
+        <div className="signin-new-user">New User? <span onClick={() => navigate("/Registration")}> Sign Up</span></div>
         </form>
     </div>
   )

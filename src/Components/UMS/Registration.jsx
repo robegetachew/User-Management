@@ -1,4 +1,3 @@
-// Registration.js
 import React, { useState } from 'react';
 import './Registration.css';
 import personIcon from '../Assets/person.png';
@@ -58,7 +57,7 @@ const Registration = () => {
 
   const handleRegister = async () => {
     try {
-      const apiUrl = 'https://dfd0-196-191-60-39.ngrok-free.app/api/register';
+      const apiUrl = 'http://192.168.0.191:8000/api/register';
       const registrationData = {
         email: email,
         name: username,
@@ -79,12 +78,10 @@ const Registration = () => {
       // Set the token as a cookie or store it in local storage as needed
       document.cookie = `yourCookieName=${token}; path=/; secure; HttpOnly`;
       console.log('Signup successful!');
-
       
       navigate('/Usersetupprofile');
     } catch (error) {
       if (error.response) {
-        
         if (error.response.status === 422 && error.response.data.errors.email) {
           // Handle case where email is already taken
           setEmailError('Email is already taken. Please use a different email.');

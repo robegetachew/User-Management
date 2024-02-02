@@ -122,7 +122,7 @@ const AddUserForm = ({ handleCancel, handleSave }) => (
  );
 
 const Admin = () => {
-  const { username, country, role, activityStatus, gender, email, phoneNumber, profilePicturePath } = useUser();
+  const { username, country, role, activityStatus, gender, email, phoneNumber, profilePicturePath } = useUser() || {};
 
   const [searchInput, setSearchInput] = useState('');
   const [roleFilter, setRoleFilter] = useState('All');

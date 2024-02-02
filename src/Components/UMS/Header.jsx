@@ -1,16 +1,19 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
 import CubeIcon from '../Assets/cube.png';
-import ProfileIcon from '../Assets/person.png';
+import ArrowDownIcon from '../Assets/arrow-down.png'; // Replace with your own arrow down image
 import './Header.css';
 import { useNavigate } from 'react-router-dom';
-import { useUser } from '../../UserContext';
+
 const Header = () => {
-  const { profilePicturePath } = useUser();
   const navigate = useNavigate();
+  const [showLogoutMenu, setShowLogoutMenu] = useState(false);
 
   const handleLogout = () => {
     navigate('/Signin');
+  };
+
+  const handleArrowClick = () => {
+    setShowLogoutMenu(!showLogoutMenu);
   };
 
   return (
@@ -22,17 +25,15 @@ const Header = () => {
           </span>
           UMS
         </h1>
-        <div className="ad-user-profile">
-          <img
-            src={profilePicturePath || ProfileIcon}
-            alt="Profile Icon"
-            className="add-profile-picture"
-          />
-          <div className="ad-logout-dropdown">
-            <button className="ad-logout-button" onClick={handleLogout}>
-              Logout
-            </button>
+        <div className={`ad-logout-dropdown ${showLogoutMenu ? 'open' : ''}`}>
+          <div className="ad-logout-button" onClick={handleArrowClick}>
+            <img src={ArrowDownIcon} alt="Arrow Down Icon" className="arrow-down-icon" />
           </div>
+          {showLogoutMenu && (
+            <div className="logout-menu" onClick={handleLogout}>
+              Logout
+            </div>
+          )}
         </div>
       </header>
     </div>
