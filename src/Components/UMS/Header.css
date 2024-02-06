@@ -1,8 +1,18 @@
-
   
- 
-  
-
- 
-  
-  
+   .ad-header {
+    background-color: #2F7897;
+    ;
+    color: white;
+    width: 1300px;
+margin-top: -15px;
+padding-right: 80px;
+  font-size: 10px;
+  height: 70px;
+  }
+.ad-icon{
+  padding-right: 10px;
+}
+  .ad-header img{
+    padding-top: 10px;
+    padding-left: 60px;
+     }

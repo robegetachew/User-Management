@@ -100,8 +100,8 @@ margin-top: 20px;
   }
   
   .signin-submit {
-    width: 225px;
-    background-color: #007DFA;
+    width: 410px;
+    background-color: red;
     color: #ffffff;
     font-weight: 700;
     border: none;
@@ -112,7 +112,6 @@ margin-top: 20px;
     border: 3px solid #6894D7;
     background: linear-gradient(0deg, #007DFA, #007DFA),
       linear-gradient(0deg, #6894D7, #6894D7);
-  padding-left: 180px;
   margin-top: 40px;
   padding-top: 13px;
   padding-bottom: 10px;

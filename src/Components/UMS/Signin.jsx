@@ -60,11 +60,9 @@ const Signin = () => {
             value={password}
           />        </div>
           </div>
-        <div className="signin-submit" type="submit">
-        <button type="submit">Submit</button>
-        </div>
+  <button type="submit" className="signin-submit" >Submit</button>
         <div className="signin-forget" onClick={() => navigate('/forgetpassword')} >
-          <span> Forget password?</span>
+          <span> Forgot password?</span>
         </div>
         <div className="signin-new-user">New User? <span onClick={() => navigate("/Registration")}> Sign Up</span></div>
         </form>

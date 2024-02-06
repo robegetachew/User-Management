@@ -12,14 +12,13 @@ const Forgetpassword = () => {
   const handleContinue = async () => {
     try {
       const apiUrl = 'http://192.168.0.191:8000/api/forget-password';
-      const response = await axios.post(apiUrl, { email });
 
-      console.log('Response:', response.data);
+      const response = await axios.post(apiUrl, { email });
 
       if (response.data.success) {
         setIsLinkSent(true);
       } else {
-        console.error('Failed to send verification link. Response:', response.data);
+        console.error('Failed to send verification link.');
       }
     } catch (error) {
       console.error('Error during verification link request:', error);
@@ -34,7 +33,7 @@ const Forgetpassword = () => {
       {!isLinkSent && (
         <div>
           <div className='message'>
-            Enter your email for the verification process; we will send a link to your email.
+            Enter your email for the verification process, we will send a link to your email.
           </div>
           <div className="signin-inputs">
             <div className="signin-txts">Email</div>

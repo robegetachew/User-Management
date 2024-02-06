@@ -45,6 +45,7 @@
     margin-left: 230px;
     font-family: 'Inter', sans-serif;
   }
+  
   .confirm-inputs {
     display: flex;
     flex-direction: column;
@@ -57,10 +58,25 @@
     margin-left: 70px;
     font-family: 'Inter', sans-serif;
   }
+  .confirm-input {
+    display: flex;
+    align-items: center;
+    margin-left: 70px;
+    font-family: 'Inter', sans-serif;
+  }
   .confirm-input img {
     margin: 0px 10px;
   }
+
+  .confirm-txts.change-username-txt {
+    margin-top: -140px;
+    margin-left: 400px; 
+  }
   
+.confirm-input.change-username-input {
+  align-items: flex-start;
+  margin-left: 400px;
+}
   .confirm-inputt {
     display: flex;
     width: 406px;
@@ -81,4 +97,16 @@
   
   .confirm-input:last-child {
     margin-bottom: 0;
+  }
+  .confirm-save-button {
+    margin-top: 80px;
+    margin-left: 520px;
+    width: 130px;
+
+    padding: 8px 16px;
+    background-color: #007DFA;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
   }

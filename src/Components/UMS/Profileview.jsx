@@ -8,8 +8,16 @@ import activityStatusIcon from '../Assets/acstatus.png';
 import genderIcon from '../Assets/male.png';
 import emailIcon from '../Assets/email.png';
 import phoneIcon from '../Assets/phone.png';
+
 const Profileview = () => {
-  const { username, country, role, activityStatus, gender, email, phoneNumber, profilePicturePath } = useUser();
+  const userData = useUser();
+
+  if (!userData) {
+    // Add loading state or handle the case where user data is not available
+    return null;
+  }
+
+  const { username, country, role, activity, gender, email, phoneNumber, profilePicturePath } = userData;
 
   return (
     <div className="profile-view-container">
@@ -28,7 +36,7 @@ const Profileview = () => {
         </p>
         <p>
           <img src={activityStatusIcon} alt="Activity Status Icon" className="icon" />
-          Activity Status: {activityStatus}
+          Activity Status: {activity}
         </p>
         <img src={separator} alt="" className='sep' />
 
@@ -49,4 +57,4 @@ const Profileview = () => {
   );
 };
 
-export default Profileview
+export default Profileview;

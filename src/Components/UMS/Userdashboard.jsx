@@ -1,29 +1,14 @@
+// Import necessary dependencies and assets
 import React, { useState, useEffect } from 'react';
 import UserProfileIcon from '../Assets/userprofile.png';
 import Update from '../Assets/update.png';
-import ActivityIcon from '../Assets/activity.png';
 import Header from './Header';
 import Footer from './Footer';
 import Myprofile from './Myprofile';
 import Adduser from './Adduser';
 import './Userdashboard.css';
 
-
-const EmptyBox = ({ section }) => {
-  
-  const [profilePicture, setProfilePicture] = useState(null);
-
-  const handleProfilePictureChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfilePicture(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
+const EmptyBox = ({ section, profilePicture, handleProfilePictureChange }) => {
   return (
     <div className="empty-box">
       {section === 'Update profile' && (
@@ -59,18 +44,24 @@ const EmptyBox = ({ section }) => {
 };
 
 const Userdashboard = (props) => {
-  const myprofile = props.myprofile;
-  const updateprofile = props.updateprofile;
-
   const [activeSection, setActiveSection] = useState('My profile');
+  const [profilePicture, setProfilePicture] = useState(null);
 
   useEffect(() => {
     setActiveSection('My profile');
   }, []);
 
   const sectionComponents = {
-    'My profile': <Myprofile />,
-    'Update profile': <EmptyBox section="Update profile" />,
+    'My profile': <Myprofile profilePicture={profilePicture} />,
+    'Update profile': (
+      <EmptyBox
+        section="Update profile"
+        profilePicture={profilePicture}
+        handleProfilePictureChange={(event) => {
+          setProfilePicture(URL.createObjectURL(event.target.files[0]));
+        }}
+      />
+    ),
   };
 
   const handleSectionClick = (section) => {
@@ -81,32 +72,34 @@ const Userdashboard = (props) => {
     <div>
       <Header />
 
-      <div className='ad-container'>
-        <div className='ad-sidebar'>
+      <div className="ad-container">
+        <div className="ad-sidebar">
           <nav>
             <ul>
               <a onClick={() => handleSectionClick('My profile')}>
-                <li className={`ad-li-container ${activeSection === 'My profile' ? 'ad-active' : ''}`}>
+                <li
+                  className={`ad-li-container ${
+                    activeSection === 'My profile' ? 'ad-active' : ''
+                  }`}
+                >
                   <img src={UserProfileIcon} alt="User Icon" />
-                  <div className='ad-txt'>
-                    My profile
-                  </div>
+                  <div className="ad-txt">My profile</div>
                 </li>
               </a>
               <a onClick={() => handleSectionClick('Update profile')}>
-                <li className={`ad-li-container ${activeSection === 'Update profile' ? 'ad-active' : ''}`}>
+                <li
+                  className={`ad-li-container ${
+                    activeSection === 'Update profile' ? 'ad-active' : ''
+                  }`}
+                >
                   <img src={Update} alt="Activity Icon" />
-                  <div className='ad-txt'>
-                    Update profile
-                  </div>
+                  <div className="ad-txt">Update profile</div>
                 </li>
               </a>
             </ul>
           </nav>
         </div>
-        <div className='ad-content'>
-          {sectionComponents[activeSection]}
-        </div>
+        <div className="ad-content">{sectionComponents[activeSection]}</div>
       </div>
       <Footer />
     </div>

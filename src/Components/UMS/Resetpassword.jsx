@@ -9,18 +9,39 @@ const Resetpassword = ({ token, email }) => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleVerify = () => {
+  const handleVerify = async () => {
     // Validate passwords
     if (newPassword !== confirmPassword) {
       setError('Passwords do not match.');
       return;
     }
 
-    // Call your backend API to update the password
-    // You may need to include the reset token and email in the API request
+    try {
+      // Call your backend API to update the password
+      const response = await fetch('http://192.168.0.191:8000/api/reset-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          newPassword,
+          token,
+        }),
+      });
 
-    // After a successful password update, you can navigate to a success page or login page
-    navigate('/signin'); // Update this to the desired route after successful password update
+      if (response.ok) {
+        // Password reset successful
+        navigate('/signin', { state: { message: 'Password reset successful!' } });
+      } else {
+        // Handle error from the backend
+        const errorData = await response.json();
+        setError(errorData.error || 'Failed to reset password');
+      }
+    } catch (error) {
+      console.error('Error resetting password:', error);
+      setError('An error occurred while resetting password');
+    }
   };
 
   return (
