@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
-import { Button } from 'react-bootstrap'; // Import Button from react-bootstrap
+import { Button } from 'react-bootstrap';
 import Edit from '../Assets/edit.png';
 import Delete from '../Assets/delete.png';
 
-const UserTable = ({ users, handleEdit, handleDelete, handleAddUser }) => {
-  const [statusToggle, setStatusToggle] = useState(false);
+const Usertable = ({ users, handleEdit, handleDelete, handleAddUser }) => {
+  const [statusToggles, setStatusToggles] = useState({});
 
-  const handleToggle = (user) => {
-    // Toggle the status and update the state
-    setStatusToggle(!statusToggle);
-
-    // Add logic to update user status on the backend if needed
-    console.log(`Toggle status for user ${user.name}`);
+  const handleToggle = (userId) => {
+    setStatusToggles((prevToggles) => ({
+      ...prevToggles,
+      [userId]: !prevToggles[userId],
+    }));
+    console.log(`Toggle status for user ${userId}. Current statusToggles:`, statusToggles);
   };
 
   return (
@@ -39,27 +39,17 @@ const UserTable = ({ users, handleEdit, handleDelete, handleAddUser }) => {
               <td>{user.email}</td>
               <td>
                 <Button
-                  onClick={() => handleToggle(user)}
-                  style={{
-                    position: 'relative',
-                    padding: '0',
-                    width: '50px',
-                    height: '30px',
-                  }}
+                  className="status-toggle-button"
+                  onClick={() => handleToggle(user.id)}
                 >
-                  {/* Circle inside the toggle button */}
+                  {statusToggles[user.id] ? 'Active' : 'Inactive'}
                   <div
+                    className="status-circle"
                     style={{
-                      position: 'absolute',
-                      width: '20.59px',
-                      height: '20.59px',
-                      borderRadius: '50%',
-                      backgroundColor: statusToggle ? 'green' : 'red',
-                      left: statusToggle ? '30px' : '0', // Adjust left position based on status
-                      transition: 'left 0.3s', // Smooth transition effect
+                      right: statusToggles[user.id] ? '0' : 'auto',
+                      left: statusToggles[user.id] ? 'auto' : '0',
                     }}
                   ></div>
-                  {user.status}
                 </Button>
               </td>
               <td>{user.role || 'User'}</td>
@@ -69,13 +59,13 @@ const UserTable = ({ users, handleEdit, handleDelete, handleAddUser }) => {
                   src={Edit}
                   alt="Edit Icon"
                   onClick={() => handleEdit(user.id)}
-                  style={{ cursor: 'pointer' }}
+                  className="action-icon"
                 />
                 <img
                   src={Delete}
                   alt="Delete Icon"
                   onClick={() => handleDelete(user.id)}
-                  style={{ cursor: 'pointer', marginLeft: '10px' }}
+                  className="action-icon"
                 />
               </td>
             </tr>
@@ -86,4 +76,5 @@ const UserTable = ({ users, handleEdit, handleDelete, handleAddUser }) => {
   );
 };
 
-export default UserTable;
+export default Usertable;
+

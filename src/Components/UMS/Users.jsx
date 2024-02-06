@@ -30,18 +30,30 @@ const UserTable = ({ users, handleEdit, handleDelete, handleAddUser }) => (
             <td>{user.id}</td>
             <td>{user.name}</td>
             <td>{user.email}</td>
-            <td>{user.status || 'Active'}</td>
+            <td>
+              {/* Toggle Button for Status */}
+              <Button
+                style={{
+                  backgroundColor: user.status === 'Active' ? 'green' : 'red',
+                  color: 'white',
+                  border: 'none',
+                  padding: '5px 10px',
+                  borderRadius: '5px',
+                  cursor: 'pointer',
+                }}
+              >
+                {user.status}
+              </Button>
+            </td>
             <td>{user.role || 'User'}</td>
             <td>{user.activity || 'N/A'}</td>
             <td>
-              {/* Edit icon */}
               <img
                 src={Edit}
                 alt="Edit Icon"
                 onClick={() => handleEdit(user.id)}
                 style={{ cursor: 'pointer' }}
               />
-              {/* Delete icon */}
               <img
                 src={Delete}
                 alt="Delete Icon"

@@ -1,18 +1,65 @@
-  
-   .ad-header {
+.addd-header {
     background-color: #2F7897;
-    ;
-    color: white;
-    width: 1300px;
-margin-top: -15px;
-padding-right: 80px;
+  color: white;
+  margin-top: -15px;
   font-size: 10px;
   height: 70px;
-  }
-.ad-icon{
+}
+.ad-user-picture {
+margin-top: -50px; 
+ margin-left: 1100px; /* Adjust the left distance as needed */
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+}
+
+.ad-username {
+  position: absolute;
+  top: 60%;
+  background-color: ;
+  right: 230px; /* Adjust the right distance as needed */
+  transform: translate(0, -50%);
+  color: white;
+  font-weight: bold;
+}
+.ad-icon {
   padding-right: 10px;
 }
-  .ad-header img{
-    padding-top: 10px;
-    padding-left: 60px;
-     }
+
+.addd-header img {
+  padding-top: 15px;
+  padding-left: 60px;
+}
+
+.ad-logout-dropdown {
+  margin-left: 1140px;
+  margin-top: -25px; 
+}
+
+.ad-logout-button {
+  cursor: pointer;
+}
+
+.arrow-down-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.logout-menu {
+  width: 50px;
+  right: 0;
+  background-color: #303030;
+  color: white;
+  margin-left: 40px;
+  padding-left: 10px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  margin-top: 1px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: none;
+}
+
+.ad-logout-dropdown.open .logout-menu {
+  display: block;
+}

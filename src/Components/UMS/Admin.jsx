@@ -75,12 +75,24 @@ const ActivityTable = ({ activityData }) => (
 );
 
 const UserTable = ({ users, handleEdit, handleDelete, handleAddUser }) => {
-  const [statusToggle, setStatusToggle] = useState(false);
+  const [statusToggles, setStatusToggles] = useState({});
 
-  const handleToggle = (user) => {
-    setStatusToggle(!statusToggle);
-    console.log(`Toggle status for user ${user.name}`);
+  const handleToggle = (userId) => {
+    setStatusToggles((prevToggles) => ({
+      ...prevToggles,
+      [userId]: !prevToggles[userId],
+    }));
+    console.log(`Toggle status for user ${userId}. Current statusToggles:`, statusToggles);
   };
+
+  useEffect(() => {
+    // Initialize status toggles based on user status
+    const initialStatusToggles = {};
+    users.forEach((user) => {
+      initialStatusToggles[user.id] = user.status === 'Active';
+    });
+    setStatusToggles(initialStatusToggles);
+  }, [users]);
 
   return (
     <div>
@@ -109,17 +121,24 @@ const UserTable = ({ users, handleEdit, handleDelete, handleAddUser }) => {
                 {/* Toggle Button for Status */}
                 <Button
                   style={{
-                    backgroundColor: user.status === 'Active' ? 'green' : 'red',
+                    background: statusToggles[user.id]
+                      ? 'linear-gradient(0deg, #61AF56, #61AF56)'
+                      : 'linear-gradient(0deg, #C23F3F, #C23F3F)',
                     color: 'white',
-                    border: 'none',
+                    width: '90px',
                     padding: '5px 10px',
+                    paddingLeft: '25px',
+                    border: `0.87px solid ${
+                      statusToggles[user.id] ? '#61AF56' : '#C23F3F'
+                    }`, // Use green for active, red for inactive
+                    paddingRight: '20px',
                     borderRadius: '5px',
                     cursor: 'pointer',
                     position: 'relative',
                   }}
-                  onClick={() => handleToggle(user)}
+                  onClick={() => handleToggle(user.id)}
                 >
-                  {user.status}
+                  {statusToggles[user.id] ? 'Active' : 'Inactive'}
                   <div
                     style={{
                       width: '20.59px',
@@ -127,12 +146,14 @@ const UserTable = ({ users, handleEdit, handleDelete, handleAddUser }) => {
                       borderRadius: '50%',
                       backgroundColor: 'white',
                       position: 'absolute',
-                      right: statusToggle ? '0' : 'auto',
-                      left: statusToggle ? 'auto' : '0',
+                      top: '2px',
+                      right: statusToggles[user.id] ? '0' : 'auto',
+                      left: statusToggles[user.id] ? 'auto' : '0',
                       transition: 'right 0.3s, left 0.3s',
                     }}
                   ></div>
                 </Button>
+
               </td>
               <td>{user.role || 'User'}</td>
               <td>{user.activity || 'N/A'}</td>
@@ -228,7 +249,15 @@ const Admin = () => {
       reader.readAsDataURL(selectedFile);
     }
   };
-
+  const handleToggle = (userId) => {
+    setUsers((prevUsers) =>
+      prevUsers.map((user) =>
+        user.id === userId
+          ? { ...user, status: user.status === 'Active' ? 'Inactive' : 'Active' }
+          : user
+      )
+    );
+  };
   const handleSectionChange = (section) => setActiveSection(section);
   const handleDelete = (userId) =>
     setUsers(users.filter((user) => user.id !== userId));

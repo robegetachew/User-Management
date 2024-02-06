@@ -5,7 +5,7 @@ import Forgetpassword from './Components/UMS/Forgetpassword';
 import Forgetpasswordd from './Components/UMS/Forgetpasswordd';
 
 import Resetpassword from './Components/UMS/Resetpassword';
-import Resetpasswordd from './Components/UMS/Resetpasswordd';
+// import Usertable from './Components/UMS/Usertable';
 
 import Usersetupprofile from './Components/UMS/Usersetupprofile';
 import Admin from './Components/UMS/Admin'
@@ -45,7 +45,7 @@ function App() {
 
       <Route path="/profileview" element={<Profileview/>}></Route>
       <Route path="/resetpassword" element={<Resetpassword />} />
-      <Route path="/resetpasswordd" element={<Resetpasswordd />} />
+      {/* <Route path="/usertable" element={<Usertable />} /> */}
 
       <Route path="/wrongpassword" element={<Wrongpassword/>}></Route>
       <Route path="/adduser" element={<Adduser/>}></Route>
