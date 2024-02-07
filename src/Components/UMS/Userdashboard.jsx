@@ -1,4 +1,3 @@
-// Import necessary dependencies and assets
 import React, { useState, useEffect } from 'react';
 import UserProfileIcon from '../Assets/userprofile.png';
 import Update from '../Assets/update.png';
@@ -8,57 +7,59 @@ import Myprofile from './Myprofile';
 import Adduser from './Adduser';
 import './Userdashboard.css';
 
-const EmptyBox = ({ section, profilePicture, handleProfilePictureChange }) => {
+const EmptyBox = ({ profilePicture, handleProfilePictureChange }) => {
   return (
     <div className="empty-box">
-      {section === 'Update profile' && (
-        <div>
-          <h2 className="update-profile-title">Update Profile</h2>
+      <div>
+        <h2 className="update-profile-title">Update Profile</h2>
 
-          {/* Profile Picture Button */}
-          <div className="profile-picture-button">
-            <label htmlFor="profile-picture-input">
-              {profilePicture ? (
-                <img
-                  src={profilePicture}
-                  alt="Profile"
-                  className="profile-picture"
-                />
-              ) : (
-                <div className="profile-placeholder">+</div>
-              )}
-            </label>
-            <input
-              type="file"
-              id="profile-picture-input"
-              accept="image/*"
-              onChange={handleProfilePictureChange}
+        {/* Profile Picture Button */}
+        <div className="profile-picture-button">
+          <label htmlFor="profile-picture-input">
+            <img
+              src={profilePicture || UserProfileIcon}
+              alt="Profile"
+              className="profile-picture"
             />
-          </div>
-
-          <Adduser />
+          </label>
+          <input
+            type="file"
+            id="profile-picture-input"
+            accept="image/*"
+            onChange={handleProfilePictureChange}
+          />
         </div>
-      )}
+
+        <Adduser />
+      </div>
     </div>
   );
 };
 
-const Userdashboard = (props) => {
+const Userdashboard = () => {
   const [activeSection, setActiveSection] = useState('My profile');
-  const [profilePicture, setProfilePicture] = useState(null);
+  const [profilePicture, setProfilePicture] = useState(localStorage.getItem('profilePicture') || null);
 
   useEffect(() => {
     setActiveSection('My profile');
   }, []);
 
   const sectionComponents = {
-    'My profile': <Myprofile profilePicture={profilePicture} />,
+    'My profile': (
+      <div className="empty-box2">
+        <Myprofile
+          profilePicture={profilePicture}
+          style={{ marginLeft: '-105%', marginTop: '85px' }}
+        />
+      </div>
+    ),
     'Update profile': (
       <EmptyBox
-        section="Update profile"
         profilePicture={profilePicture}
         handleProfilePictureChange={(event) => {
-          setProfilePicture(URL.createObjectURL(event.target.files[0]));
+          const pictureURL = URL.createObjectURL(event.target.files[0]);
+          setProfilePicture(pictureURL);
+          localStorage.setItem('profilePicture', pictureURL);
         }}
       />
     ),
@@ -70,7 +71,7 @@ const Userdashboard = (props) => {
 
   return (
     <div>
-      <Header />
+      <Header profilePicture={profilePicture} />
 
       <div className="ad-container">
         <div className="ad-sidebar">

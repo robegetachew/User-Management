@@ -18,6 +18,7 @@ import 'react-phone-number-input/style.css';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import gender from '../Assets/gender.png';
+import Cookies from 'js-cookie';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -27,10 +28,13 @@ const Adduser = ({ className, style, onCancel, onSave }) => {
   const navigate = useNavigate();
 
   // State variables
+  const [userdata, setUserdata] = useState(null);
+  const [isAuth, setIsAuth] = useState(false);
+
   const [fullName, setFullName] = useState('');
   const [isGenderDropdownOpen, setIsGenderDropdownOpen] = useState(false);
   const [selectedGender, setSelectedGender] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phone_number, setphone_number] = useState('');
   const [birthdate, setBirthdate] = useState(null);
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const [countries, setCountries] = useState([]);
@@ -42,7 +46,10 @@ const Adduser = ({ className, style, onCancel, onSave }) => {
   const [zIndexGender, setZIndexGender] = useState(1);
   const [zIndexLocation, setZIndexLocation] = useState(1);
 
+
+  
   useEffect(() => {
+    
     const fetchCountries = async () => {
       try {
         const response = await axios.get('https://restcountries.com/v3.1/all');
@@ -57,7 +64,34 @@ const Adduser = ({ className, style, onCancel, onSave }) => {
     };
 
     fetchCountries();
+    const access_token = Cookies.get('access_token'); 
+    setIsAuth(!!access_token);
+
+    if (access_token) {
+      fetchUserData(access_token); 
+    }
+    
   }, []);
+
+  const fetchUserData = async (access_token) => {
+  
+    try {
+      const response = await fetch('http://192.168.14.109:8000/api/profile', {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch profile data');
+      }
+
+      const data = await response.json();
+      setUserdata(data.data);
+    } catch (error) {
+    } finally {
+    }
+  };
 
   const handleFullNameChange = (event) => {
     setFullName(event.target.value);
@@ -76,8 +110,8 @@ const Adduser = ({ className, style, onCancel, onSave }) => {
   };
 
   // Function to handle changes in phone number input
-  const handlePhoneNumberChange = (value, data, event, formattedValue) => {
-    setPhoneNumber(value);
+  const handlephone_numberChange = (value, data, event, formattedValue) => {
+    setphone_number(value);
   };
 
   // Function to handle date picker click
@@ -117,7 +151,7 @@ const Adduser = ({ className, style, onCancel, onSave }) => {
     setFullName('');
     setIsGenderDropdownOpen(false);
     setSelectedGender('');
-    setPhoneNumber('');
+    setphone_number('');
     setBirthdate(null);
     setIsDatePickerOpen(false);
     setIsLocationDropdownOpen(false);
@@ -131,29 +165,33 @@ const Adduser = ({ className, style, onCancel, onSave }) => {
 
   // Placeholder function for submitting the form data
   const handleSubmit = () => {
-    // Replace with your implementation to submit the form data
     const formData = {
-      fullName,
-      selectedGender,
-      phoneNumber,
-      birthdate,
-      selectedLocation,
-      password,
-      confirmPassword,
-      username,
+        fullName,
+        selectedGender,
+        phone_number,
+        birthdate,
+        selectedLocation: selectedLocation ? selectedLocation.label : null,
+        password,
+        confirmPassword,
+        username,
     };
-    axios
-      .post('/api/submitUserData', formData)
-      .then((response) => {
-        console.log('Form data submitted successfully:', response.data);
-        navigate('/admin');
-      })
-      .catch((error) => {
-        console.error('Error submitting form data:', error);
-      });
-  };
+    console.log('Form data submitted successfully:', formData);
 
-  
+    axios.put('http://192.168.14.109:8000/api/update', formData, {
+        headers: {
+            'Authorization': `Bearer ${Cookies.get('access_token')}`, 
+            'Content-Type': 'application/json',
+        },
+    })
+    .then((response) => {
+        console.log('Form data submitted successfully:', formData);
+        navigate('/admin');
+    })
+    .catch((error) => {
+        console.error('Error submitting form data:', error);
+    });
+};
+
   return (
     <div className={`Adduser ${style || ''}`}>
       <div className='add-container'>
@@ -162,57 +200,73 @@ const Adduser = ({ className, style, onCancel, onSave }) => {
           <div className='add-txts'>Full Name</div>
           <div className='add-input'>
             <img src={person_ic} alt='' />
-            <input type='text' value={fullName} onChange={handleFullNameChange} />
+            <input type='text' value={fullName} placeholder={userdata?.full_name} onChange={handleFullNameChange} />
           </div>
           <div className='add-txts'>Gender</div>
-          <div
-            className={`add-gender-input ${isGenderDropdownOpen ? 'open' : ''}`}
-            style={{ zIndex: zIndexGender }}
-          >
-            <img src={gender}  className= 'add-location-icon' alt='' />
-            <div className='add-gender-button' onClick={handleGenderButtonClick}>
-              <img
-                className='add-arrow-icon'
-                src={isGenderDropdownOpen ? arrow_up_icon : arrow_down_icon}
-                alt='Arrow'
-              />
-            </div>
-            {selectedGender && <div className='add-selected-gender'>{selectedGender}</div>}
-            {isGenderDropdownOpen && (
-              <div className='add-gender-dropdown'>
-              <div className='add-gender-option' onClick={() => handleGenderSelect('Female')}>Female</div>
-              <div className='add-gender-option' onClick={() => handleGenderSelect('Male')}>Male</div>
-            </div>
-            )}
-          </div>
+<div
+  className={`add-gender-input ${isGenderDropdownOpen ? 'open' : ''}`}
+  style={{ zIndex: zIndexGender }}
+>
+  <img src={gender} className='add-location-icon' alt='' />
+  <div className='add-gender-button' onClick={handleGenderButtonClick}>
+    <img
+      className='add-arrow-icon'
+      src={isGenderDropdownOpen ? arrow_up_icon : arrow_down_icon}
+      alt='Arrow'
+    />
+  </div>
+  {selectedGender ? (
+    <div className='add-selected-gender'>{selectedGender}</div>
+  ) : (
+    <input
+      type='text'
+      placeholder={userdata?.gender || 'Select gender'}
+      readOnly
+      style={{ border: 'none', outline: 'none' , marginLeft: '-220px' }} // Add invisible border
+
+      value={selectedGender} 
+    />
+  )}
+  {isGenderDropdownOpen && (
+    <div className='add-gender-dropdown'>
+      <div className='add-gender-option' onClick={() => handleGenderSelect('Female')}>Female</div>
+      <div className='add-gender-option' onClick={() => handleGenderSelect('Male')}>Male</div>
+    </div>
+  )}
+</div>
+
+ 
+
           <div className='add-txts'>Phone Number</div>
           <div className='add-input'>
             <div className='add-c-code'>
               <PhoneInput
-                placeholder='Enter phone number'
-                value={phoneNumber}
-                onChange={setPhoneNumber}
+                placeholder= {userdata?.phone_number || phone_number}
+                value={phone_number}
+                onChange={setphone_number}
                 defaultCountry='ET'
                 countryOptions={[{ value: 'ET', label: '+251' }]}
               />
             </div>
           </div>
           <div className='add-txts'>Date of birth</div>
-          <div className='add-input'>
-            
-            <img src={cal_ic} alt='Calendar' className='add-cal-icon' />
-            <DatePicker
-              selected={birthdate}
-              onChange={(date) => setBirthdate(date)}
-              dateFormat='dd/MM/yyyy'
-              placeholderText='Select birth date'
-              open={isDatePickerOpen}
-              onClickOutside={() => setIsDatePickerOpen(false)}
-            />
-            <div className='add-select-date' onClick={handleDatePickerClick}>
-              <img src={select_cal_icon} alt='Calendar' className='add-select-icon' />
-            </div>
-          </div>
+<div className='add-input'>
+  <img src={cal_ic} alt='Calendar' className='add-cal-icon' />
+
+  <DatePicker
+    selected={birthdate}
+    onChange={(date) => setBirthdate(date)}
+    dateFormat='dd/MM/yyyy'
+    open={isDatePickerOpen}
+    onClickOutside={() => setIsDatePickerOpen(false)}
+    placeholderText={userdata?.date_of_birth || 'Select date of birth'}
+  />
+  
+  <div className='add-select-date' onClick={handleDatePickerClick}>
+    <img src={select_cal_icon} alt='Calendar' className='add-select-icon' />
+  </div>
+</div>
+
         
         </div>
         <div className='add-side2'>
@@ -229,30 +283,38 @@ const Adduser = ({ className, style, onCancel, onSave }) => {
           <div className='add-txts'>Change username</div>
           <div className='add-input'>
             <img src={person_ic} alt='' />
-            <input type='text' value={username} onChange={handleUsernameChange} />
+            <input type='text' value={username} onChange={handleUsernameChange} placeholder={userdata?.name}/>
           </div>
-            <div className='add-txts'>Location</div>
-          <div
-            className={` add-gender-input ${isGenderDropdownOpen ? 'open' : ''}`}
-            style={{ zIndex: zIndexGender }}
-          >
-            <img src={location_icon} alt='Location' className='add-location-icon' />
-            <div className='add-gender-button' onClick={handleLocationButtonClick}>
-              <img
-                className='add-arrow-iconn'
-                src={isLocationDropdownOpen ? arrow_up_icon : arrow_down_icon}
-                alt='Arrow'
-              />
-            </div>
-            {selectedLocation && <div className='add-selected-gender'>{selectedLocation.label}</div>}
-            {isLocationDropdownOpen && (
-             <div className='add-location-dropdown' style={{ maxHeight: '75px', overflowY: 'auto' }}>
-             {countries.map((country) => (
-               <div key={country.value} onClick={() => handleLocationSelect(country)}>
-                 {country.label}
-               </div>
-             ))}
-           </div>
+          <div className='add-txts'>Location</div>
+<div
+  className={`add-gender-input ${isGenderDropdownOpen ? 'open' : ''}`}
+  style={{ zIndex: zIndexGender }}
+>
+  <img src={location_icon} alt='Location' className='add-location-icon' />
+  <div className='add-gender-button' onClick={handleLocationButtonClick}>
+    <img
+      className='add-arrow-iconn'
+      src={isLocationDropdownOpen ? arrow_up_icon : arrow_down_icon}
+      alt='Arrow'
+    />
+  </div>
+
+  {selectedLocation ? (
+    <div className='add-selected-gender'>{selectedLocation.label}</div>
+  ) : (
+    <div className='add-selected-gender' style={{ color: '#aaa' }}>
+      {userdata?.location || 'Select location'}
+    </div>
+  )}
+
+  {isLocationDropdownOpen && (
+    <div className='add-location-dropdown' style={{ maxHeight: '75px', overflowY: 'auto' }}>
+      {countries.map((country) => (
+        <div key={country.value} onClick={() => handleLocationSelect(country)}>
+          {country.label}
+        </div>
+      ))}
+    </div>
 
               
             )}

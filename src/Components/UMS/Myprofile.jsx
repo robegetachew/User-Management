@@ -12,7 +12,7 @@ import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
-const Myprofile = () => {
+const Myprofile = ({ style }) => {
   const [isAuth, setIsAuth] = useState(false);
   const [userdata, setUserdata] = useState(null);
   const [userinfo, setUserinfo] = useState(null);
@@ -20,7 +20,7 @@ const Myprofile = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   
-  const { username, country, role, activity , gender, email, phoneNumber, profilePicturePath } = useUser() || {};
+  const { username, country, role, activity , gender, email, phone_number, image_path } = useUser() || {};
 
   useEffect(() => {
     const access_token = Cookies.get('access_token'); 
@@ -36,7 +36,7 @@ const Myprofile = () => {
     setError(null);
 
     try {
-      const response = await fetch('http://192.168.0.191:8000/api/profile', {
+      const response = await fetch('http://192.168.14.109:8000/api/profile', {
         headers: {
           Authorization: `Bearer ${access_token}`,
         },
@@ -48,7 +48,6 @@ const Myprofile = () => {
 
       const data = await response.json();
       setUserdata(data.data);
-      setUserinfo(data.info); // Assuming the user data is within a "user" property
     } catch (error) {
       setError(error.message);
     } finally {
@@ -58,14 +57,23 @@ const Myprofile = () => {
 
   // Render the Myprofile component
   return (
+    <div style={style}>
+
     <div className="my-profile-container">
-      <div className="profilee-picture" style={{ backgroundImage: `url(${profilePicturePath || person})` }}></div>
+    <div className="profilee-picture">
+  {userdata?.image_path && (
+    <img
+      src={`http://192.168.14.109:8000/storage/${userdata.image_path}`} 
+      alt="Profile"
+      className="profilee-picture"
+    />
+  )}
+</div>
       <div className="user-info">
-        {/* Display user information */}
         <p>
           <strong>Username: {userdata?.name || username}</strong>
         </p>
-        <p>Country: {userinfo?.location || country}</p>
+        <p>Country: {userdata?.location || country}</p>
         <img src={separator} alt="" className="sep" />
         <p>
           <img src={roleIcon} alt="Role Icon" className="icon" />
@@ -82,7 +90,7 @@ const Myprofile = () => {
         <img src={separator} alt="" className="sep" />
         <p>
           <img src={genderIcon} alt="Gender Icon" className="icon" />
-          Gender: {gender}
+          Gender:  {userdata?.gender || gender}
         </p>
         <p>
   <img src={emailIcon} alt="Email Icon" className="icon" />
@@ -90,9 +98,10 @@ const Myprofile = () => {
 </p>
         <p>
           <img src={phoneIcon} alt="Phone Icon" className="icon" />
-          Phone Number: {phoneNumber}
+          Phone Number: {userdata?.phone_number || phone_number}
         </p>
       </div>
+    </div>
     </div>
   );
 };

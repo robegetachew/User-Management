@@ -31,6 +31,7 @@ import Edit from '../Assets/edit.png';
 import Delete from '../Assets/delete.png';
 import { useAuth } from './Auth-context';
 import Header from './Header';
+import Myprofile from './Myprofile';
 
 const initialUsers = [
   { id: 1, name: 'Unknown', email: 'unknown@example.com', status: 'Active', role: 'Admin', activity: 'High' },
@@ -424,41 +425,29 @@ const Admin = () => {
     </div>
   ),
   
-    Profile: () => (
-      <div className='ad-user-activity-container'>
-        <div className="ad-profile-section">
-          <div className="ad-profile-box">
-            <label htmlFor="profile-picture" className="ad-profile-picture">
-          <input
-            type="file"
-            id="profile-picture"
-            accept="image/*"
-            onChange={handleAddPicture}
-            style={{ display: 'none' }}
-          />
-          <img src={profilePicture || "../Assets/person.png"} alt="Profile Picture" />
-        </label>
-          <label htmlFor="profile-picture" className="upload-icon-label">
-            <img src={UploadPicture} alt="Upload Icon" className="upload-icon" />
-          </label>
-            
+  Profile: () => (
+    <div className='ad-user-activity-container'>
+      <div className="ad-profile-section">
+        <div className="ad-profile-box">
+          
+          <Myprofile style={{ marginLeft: '-660px', marginTop: '85px' }} />
+        </div>
+        <div className="ad-update-profile-box">
+          <div className='update-title'>
+            Update profile
           </div>
-          <div className="ad-update-profile-box">
-            <div className='update-title'>
-              Update profile
-            </div>
-            <div className='aduser'>
-              <Adduser
-                className="additional-class-for-all-instances"
-                style="style2"  
-                onCancel={handleCancelAddUser}
-                onSave={handleSaveAddUser}
-              />
-            </div>
+          <div className='aduser'>
+            <Adduser
+              className="additional-class-for-all-instances"
+              style="style2"
+              onCancel={handleCancelAddUser}
+              onSave={handleSaveAddUser}
+            />
           </div>
         </div>
       </div>
-    ),
+    </div>
+  ),
   };
 
   return (

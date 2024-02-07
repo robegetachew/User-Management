@@ -35,7 +35,6 @@ const Usersetupprofile = () => {
   const [zIndexLocation, setZIndexLocation] = useState(1);
   const [zIndexBirthdate, setZIndexBirthdate] = useState(1);
 
-
   useEffect(() => {
     const fetchCountries = async () => {
       try {
@@ -109,7 +108,7 @@ const Usersetupprofile = () => {
       Object.entries(data).forEach(([key, value]) => formData.append(key, value));
 
       await axios.post(
-        'http://192.168.0.191:8000/api/info',
+        'BACKENDAPIENDPOINT', 
         formData,
         {
           headers: {
@@ -120,11 +119,19 @@ const Usersetupprofile = () => {
       );
 
       console.log('Profile setup successful');
-      navigate('/Userdashboard');
+
+      const role = localStorage.getItem('role');
+
+      if (role === 'admin') {
+        navigate('/Admin');
+      } else {
+        navigate('/Userdashboard');
+      }
     } catch (error) {
       console.error('Error setting up profile:', error);
     }
   };
+
 
   return (
     <div className='container'>

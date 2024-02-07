@@ -4,6 +4,7 @@ import ArrowDownIcon from '../Assets/arrow-down.png'; // Replace with your own a
 import UserIcon from '../Assets/person.png'; // Replace with the user picture icon
 import './Header.css';
 import { useNavigate } from 'react-router-dom';
+import { useUser } from '../../UserContext';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -17,6 +18,9 @@ const Header = () => {
     setShowLogoutMenu(!showLogoutMenu);
   };
 
+  const [userdata, setUserdata] = useState(null);
+
+
   return (
     <div>
       <header className="addd-header" style={{ width: '1300px', margin: '-15px 0 0 0', padding: '0 80px', fontSize: '10px', height: '70px', position: 'relative' }}>
@@ -27,8 +31,7 @@ const Header = () => {
           UMS
         </h1>
         <div className='ad-username'>
-          Your username
-          </div>       
+        </div>       
            <div className="ad-user-picture">
           <img src={UserIcon} alt="User Icon" className="user-icon" />
         </div>
