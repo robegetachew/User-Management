@@ -11,22 +11,26 @@ import 'react-phone-number-input/style.css';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import x_ic from '../Assets/x.png';
-import gender from '../Assets/gender.png';
+import genderr from '../Assets/gender.png';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import 'react-datetime-picker/dist/DateTimePicker.css';
 import DateTimePicker from 'react-datetime-picker';
+import Cookies from 'js-cookie';
 
 const Usersetupprofile = () => {
   const currentDate = new Date();
   const maxAllowedDate = new Date(currentDate.getFullYear() - 13, currentDate.getMonth(), currentDate.getDate());
   const navigate = useNavigate();
-  const [fullName, setFullName] = useState('');
-  const [selectedGender, setSelectedGender] = useState('');
+  const [email, setEmail] = useState('');
+  const [name, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [full_name, setFullName] = useState('');
+  const [gender, setSelectedGender] = useState('');
   const [isGenderDropdownOpen, setIsGenderDropdownOpen] = useState(false);
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [birthdate, setBirthdate] = useState(null);
-  const [countries, setCountries] = useState([]);
+  const [phone_number, setPhoneNumber] = useState('');
+  const [date_of_birth, setBirthdate] = useState(null);
+  const [location, setCountries] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [isLocationDropdownOpen, setIsLocationDropdownOpen] = useState(false);
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
@@ -47,7 +51,17 @@ const Usersetupprofile = () => {
 
     fetchCountries();
   }, []);
+ 
+  const inputDate = new Date(date_of_birth);
+  const formattedDate = inputDate.toLocaleString('en-GB', {
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit'
+});
 
+console.log(formattedDate); // Output: "2000-02-01 00:00"
+
+ 
   const handleGenderButtonClick = () => {
     setIsGenderDropdownOpen(!isGenderDropdownOpen);
     setZIndexGender(isGenderDropdownOpen ? 1 : 2);
@@ -79,8 +93,10 @@ const Usersetupprofile = () => {
     setZIndexLocation(1);
   };
 
-  const handlePictureChange = (event) => setSelectedPicture(event.target.files[0]);
-
+const handlePictureChange = (event) => {
+  const selectedFile = event.target.files[0];
+  setSelectedPicture(selectedFile);
+};
   const handleFullNameChange = (event) => setFullName(event.target.value);
 
   const handleClear = () => {
@@ -93,27 +109,32 @@ const Usersetupprofile = () => {
   };
 
   const handleSaveChanges = async () => {
+    setEmail(Cookies.get('email'))
+    setUsername(Cookies.get('name'))
+    setPassword(Cookies.get('password'))
+
     try {
       const formData = new FormData();
       formData.append('picture', selectedPicture);
 
       const data = {
-        fullName,
-        gender: selectedGender,
-        phoneNumber,
-        birthdate,
+        name,
+        email,
+        password,
+        full_name,
+        gender: gender,
+        phone_number,
+        date_of_birth,
         location: selectedLocation ? selectedLocation.label : '',
       };
 
-      Object.entries(data).forEach(([key, value]) => formData.append(key, value));
-
+console.log(data)
       await axios.post(
-        'BACKENDAPIENDPOINT', 
+        'http://172.20.10.6:8000/api/register', 
         formData,
         {
           headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         }
       );
@@ -144,13 +165,13 @@ const Usersetupprofile = () => {
         </div>
         <div className="input">
           <img src={person_ic} alt="" />
-          <input type="text" value={fullName} onChange={handleFullNameChange} />
+          <input type="text" value={full_name} onChange={handleFullNameChange} />
         </div>
         <div className="txts">
           Gender
         </div>
         <div className={`input gender-input ${isGenderDropdownOpen ? 'open' : ''}`} style={{ zIndex: zIndexGender }}>
-          <img src={gender} alt="" />
+          <img src={genderr} alt="" />
           <div className="gender-button" onClick={handleGenderButtonClick}>
             <img
               className="arrow-icon"
@@ -158,8 +179,8 @@ const Usersetupprofile = () => {
               alt="Arrow"
             />
           </div>
-          {selectedGender && (
-            <div className="selected-gender">{selectedGender}</div>
+          {gender && (
+            <div className="selected-gender">{gender}</div>
           )}
           {isGenderDropdownOpen && (
             <div className="gender-dropdown">
@@ -175,7 +196,7 @@ const Usersetupprofile = () => {
           <div className='c-code'>
             <PhoneInput
               placeholder="Enter phone number"
-              value={phoneNumber}
+              value={phone_number}
               onChange={setPhoneNumber}
               defaultCountry="ET"
               countryOptions={[
@@ -196,7 +217,7 @@ const Usersetupprofile = () => {
   onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
 />
   <DatePicker
-    selected={birthdate}
+    selected={date_of_birth}
     onChange={(date) => setBirthdate(date)}
     dateFormat="yyyy"
     placeholderText="Select birth year"
@@ -230,7 +251,7 @@ const Usersetupprofile = () => {
           {isLocationDropdownOpen && (
             <div className="gender-dropdown" style={{ maxHeight: '150px', overflowY: 'auto' }}>
               {/* Set the max height and enable scrolling */}
-              {countries.map(country => (
+              {location.map(country => (
                 <div key={country.value} onClick={() => handleLocationSelect(country)}>
                   {country.label}
                 </div>
@@ -242,23 +263,27 @@ const Usersetupprofile = () => {
           Picture
         </div>
         <div className="input">
-          <label className="upload-btn">
-            Upload
-            <input type="file" accept="image/*" onChange={handlePictureChange} />
-          </label>
-          {selectedPicture && (
-            <div className="file-info">
-              <div className="file-name">{selectedPicture.name}</div>
-              <div className='xicon'><img
-                src={x_ic}
-                alt="Delete"
-                className="delete-icon"
-                onClick={() => setSelectedPicture(null)}
-              />
-              </div>
-            </div>
-          )}
-        </div>
+  <label className="upload-btn">
+    Upload
+    <input type="file" accept="image/*" onChange={handlePictureChange} />
+  </label>
+  {selectedPicture && (
+    <div className="file-info">
+      <div className="file-name">{selectedPicture.name}</div>
+      <div className="preview-image">
+        <img src={URL.createObjectURL(selectedPicture)} alt="Selected" />
+      </div>
+      <div className='xicon'>
+        <img
+          src={x_ic}
+          alt="Delete"
+          className="delete-icon"
+          onClick={() => setSelectedPicture(null)}
+        />
+      </div>
+    </div>
+  )}
+</div>
       </div>
       <div className="submit-container">
         <div className="submit" onClick={handleClear}>Clear</div>

@@ -5,6 +5,7 @@ import emailIcon from '../Assets/email.png';
 import passwordIcon from '../Assets/password.png';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 const Registration = () => {
   const navigate = useNavigate();
@@ -57,26 +58,26 @@ const Registration = () => {
 
   const handleRegister = async () => {
     try {
-      const apiUrl = 'http://192.168.0.191:8000/api/register';
+      //const apiUrl = 'http://172.20.10.6:8000/api/register';
       const registrationData = {
-        email: email,
-        name: username,
-        password: password,
+        email: Cookies.set('email', email),
+        name: Cookies.set('name', username),
+        password: Cookies.set('password', password),
         password_confirmation: confirmPassword,
       };
 
-      const response = await axios.post(apiUrl, registrationData, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      // const response = await axios.post(apiUrl, registrationData, {
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      // });
 
       // Assuming Laravel returns a token on successful registration
-      const token = response.data.access_token;
-      console.log(token)
+      // const token = response.data.access_token;
+      // console.log(token)
 
       // Set the token as a cookie or store it in local storage as needed
-      document.cookie = `yourCookieName=${token}; path=/; secure; HttpOnly`;
+      // document.cookie = `yourCookieName=${token}; path=/; secure; HttpOnly`;
       console.log('Signup successful!');
       
       navigate('/Usersetupprofile');

@@ -18,7 +18,7 @@ const Signin = () => {
       password: password
     }
     try {
-      const {data} = await axios.post("http://192.168.14.109:8000/api/login", user)
+      const {data} = await axios.post("http://172.20.10.6:8000/api/login", user)
       
       // Storing Access in cookie
       Cookies.set('access_token', data.authorization.token);

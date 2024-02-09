@@ -18,7 +18,7 @@ const Resetpassword = ({ token, email }) => {
 
     try {
       // Call your backend API to update the password
-      const response = await fetch('http://192.168.0.191:8000/api/reset-password', {
+      const response = await fetch('http://172.20.10.6:8000/api/reset-password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

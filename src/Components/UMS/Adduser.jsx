@@ -31,18 +31,18 @@ const Adduser = ({ className, style, onCancel, onSave }) => {
   const [userdata, setUserdata] = useState(null);
   const [isAuth, setIsAuth] = useState(false);
 
-  const [fullName, setFullName] = useState('');
+  const [full_name, setFullName] = useState('');
   const [isGenderDropdownOpen, setIsGenderDropdownOpen] = useState(false);
-  const [selectedGender, setSelectedGender] = useState('');
+  const [gender, setSelectedGender] = useState('');
   const [phone_number, setphone_number] = useState('');
-  const [birthdate, setBirthdate] = useState(null);
+  const [date_of_birth, setBirthdate] = useState(null);
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
-  const [countries, setCountries] = useState([]);
+  const [location, setCountries] = useState([]);
   const [isLocationDropdownOpen, setIsLocationDropdownOpen] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [username, setUsername] = useState('');
+  const [name, setUsername] = useState('');
   const [zIndexGender, setZIndexGender] = useState(1);
   const [zIndexLocation, setZIndexLocation] = useState(1);
 
@@ -76,7 +76,7 @@ const Adduser = ({ className, style, onCancel, onSave }) => {
   const fetchUserData = async (access_token) => {
   
     try {
-      const response = await fetch('http://192.168.14.109:8000/api/profile', {
+      const response = await fetch('http://172.20.10.6:8000/api/profile', {
         headers: {
           Authorization: `Bearer ${access_token}`,
         },
@@ -165,19 +165,43 @@ const Adduser = ({ className, style, onCancel, onSave }) => {
 
   // Placeholder function for submitting the form data
   const handleSubmit = () => {
-    const formData = {
-        fullName,
-        selectedGender,
-        phone_number,
-        birthdate,
-        selectedLocation: selectedLocation ? selectedLocation.label : null,
-        password,
-        confirmPassword,
-        username,
-    };
+    let formData = {};
+
+if (full_name) {
+  formData.full_name = full_name;
+}
+
+if (gender) {
+  formData.gender = gender;
+}
+
+if (phone_number) {
+  formData.phone_number = phone_number;
+}
+
+if (date_of_birth) {
+  formData.date_of_birth = date_of_birth;
+}
+
+if (selectedLocation) {
+  formData.selectedLocation = selectedLocation.label;
+}
+
+if (password) {
+  formData.password = password;
+}
+
+if (confirmPassword) {
+  formData.confirmPassword = confirmPassword;
+}
+
+if (name) {
+  formData.name = name;
+}
+
     console.log('Form data submitted successfully:', formData);
 
-    axios.put('http://192.168.14.109:8000/api/update', formData, {
+    axios.put('http://172.20.10.6:8000/api/update', formData, {
         headers: {
             'Authorization': `Bearer ${Cookies.get('access_token')}`, 
             'Content-Type': 'application/json',
@@ -185,7 +209,7 @@ const Adduser = ({ className, style, onCancel, onSave }) => {
     })
     .then((response) => {
         console.log('Form data submitted successfully:', formData);
-        navigate('/admin');
+        navigate('/userdashboard');
     })
     .catch((error) => {
         console.error('Error submitting form data:', error);
@@ -200,7 +224,7 @@ const Adduser = ({ className, style, onCancel, onSave }) => {
           <div className='add-txts'>Full Name</div>
           <div className='add-input'>
             <img src={person_ic} alt='' />
-            <input type='text' value={fullName} placeholder={userdata?.full_name} onChange={handleFullNameChange} />
+            <input type='text' value={full_name} placeholder={userdata?.full_name} onChange={handleFullNameChange} />
           </div>
           <div className='add-txts'>Gender</div>
 <div
@@ -215,8 +239,8 @@ const Adduser = ({ className, style, onCancel, onSave }) => {
       alt='Arrow'
     />
   </div>
-  {selectedGender ? (
-    <div className='add-selected-gender'>{selectedGender}</div>
+  {gender ? (
+    <div className='add-selected-gender'>{gender}</div>
   ) : (
     <input
       type='text'
@@ -224,7 +248,7 @@ const Adduser = ({ className, style, onCancel, onSave }) => {
       readOnly
       style={{ border: 'none', outline: 'none' , marginLeft: '-220px' }} // Add invisible border
 
-      value={selectedGender} 
+      value={gender} 
     />
   )}
   {isGenderDropdownOpen && (
@@ -254,13 +278,15 @@ const Adduser = ({ className, style, onCancel, onSave }) => {
   <img src={cal_ic} alt='Calendar' className='add-cal-icon' />
 
   <DatePicker
-    selected={birthdate}
-    onChange={(date) => setBirthdate(date)}
-    dateFormat='dd/MM/yyyy'
-    open={isDatePickerOpen}
-    onClickOutside={() => setIsDatePickerOpen(false)}
-    placeholderText={userdata?.date_of_birth || 'Select date of birth'}
-  />
+  selected={date_of_birth}
+  onChange={(date) => setBirthdate(date)}
+  dateFormat='yyyy-MM-dd HH:mm:ss'
+  timeFormat="HH:mm:ss"
+  open={isDatePickerOpen}
+  onClickOutside={() => setIsDatePickerOpen(false)}
+  placeholderText={userdata?.date_of_birth || 'Select date of birth'}
+/>
+
   
   <div className='add-select-date' onClick={handleDatePickerClick}>
     <img src={select_cal_icon} alt='Calendar' className='add-select-icon' />
@@ -283,7 +309,7 @@ const Adduser = ({ className, style, onCancel, onSave }) => {
           <div className='add-txts'>Change username</div>
           <div className='add-input'>
             <img src={person_ic} alt='' />
-            <input type='text' value={username} onChange={handleUsernameChange} placeholder={userdata?.name}/>
+            <input type='text' value={name} onChange={handleUsernameChange} placeholder={userdata?.name}/>
           </div>
           <div className='add-txts'>Location</div>
 <div
@@ -309,7 +335,7 @@ const Adduser = ({ className, style, onCancel, onSave }) => {
 
   {isLocationDropdownOpen && (
     <div className='add-location-dropdown' style={{ maxHeight: '75px', overflowY: 'auto' }}>
-      {countries.map((country) => (
+      {location.map((country) => (
         <div key={country.value} onClick={() => handleLocationSelect(country)}>
           {country.label}
         </div>

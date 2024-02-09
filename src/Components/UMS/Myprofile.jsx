@@ -36,7 +36,7 @@ const Myprofile = ({ style }) => {
     setError(null);
 
     try {
-      const response = await fetch('http://192.168.14.109:8000/api/profile', {
+      const response = await fetch('http://172.20.10.6:8000/api/profile', {
         headers: {
           Authorization: `Bearer ${access_token}`,
         },
@@ -63,7 +63,7 @@ const Myprofile = ({ style }) => {
     <div className="profilee-picture">
   {userdata?.image_path && (
     <img
-      src={`http://192.168.14.109:8000/storage/${userdata.image_path}`} 
+      src={`http://172.20.10.6:8000/storage/${userdata.image_path}`} 
       alt="Profile"
       className="profilee-picture"
     />
